@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<link rel="alternate" hreflang="pt" href="/chapters/01-projetos.html" />
+<link rel="alternate" hreflang="en" href="/en/chapters/01-projetos.en.html" />
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.10.18">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>1  Projects: the unit of work in R – The QGSL Lab R Course</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><meta name="quarto:offset" content="../">
+<link href="../chapters/02-linguagem.en.html" rel="next">
+<link href="../index.en.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script><script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5a1953863e1f72ef3b996ef827f01ca7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-2531e20ceebe0233fa76cf5b365e7f3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><link rel="stylesheet" href="../assets/qgsl.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+<script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script><div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.en.html">Module 1 — Foundations, data and the Zen of R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.en.html"><span class="chapter-number">1</span>  <span class="chapter-title">Projects: the unit of work in R</span></a></li>
+</ol></nav><a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">The QGSL Lab R Course</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="dropdown" id="languages-links-parent">
+<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> English</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="../../chapters/01-projetos.html" id="language-link-pt">Português (BR)</a></li></ul>
+</div>
+<div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 1 — Foundations, data and the Zen of R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-projetos.en.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>  <span class="chapter-title">Projects: the unit of work in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-linguagem.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>  <span class="chapter-title">R as a language</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-estruturas.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>  <span class="chapter-title">Data structures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-pacotes.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>  <span class="chapter-title">Packages and the ecosystem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-importacao.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>  <span class="chapter-title">Importing data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-dplyr.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>  <span class="chapter-title">Transforming data with dplyr I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-tidy.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>  <span class="chapter-title">Tidy data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-limpeza.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>  <span class="chapter-title">Cleaning special types</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-zen.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>  <span class="chapter-title">The Zen of R in practice and the capstone project</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.en.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Appendices</span></span>
+  </li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#lesson-goals" id="toc-lesson-goals" class="nav-link active" data-scroll-target="#lesson-goals">Lesson goals</a></li>
+  <li>
+<a href="#setting-up-your-environment" id="toc-setting-up-your-environment" class="nav-link" data-scroll-target="#setting-up-your-environment"><span class="header-section-number">1.1</span> Setting up your environment</a>
+  <ul class="collapse">
+<li><a href="#what-needs-to-be-installed" id="toc-what-needs-to-be-installed" class="nav-link" data-scroll-target="#what-needs-to-be-installed"><span class="header-section-number">1.1.1</span> What needs to be installed</a></li>
+  <li><a href="#a-tour-of-rstudio" id="toc-a-tour-of-rstudio" class="nav-link" data-scroll-target="#a-tour-of-rstudio"><span class="header-section-number">1.1.2</span> A tour of RStudio</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#the-problem-loose-scripts" id="toc-the-problem-loose-scripts" class="nav-link" data-scroll-target="#the-problem-loose-scripts"><span class="header-section-number">1.2</span> The problem: loose scripts</a>
+  <ul class="collapse">
+<li><a href="#the-working-directory" id="toc-the-working-directory" class="nav-link" data-scroll-target="#the-working-directory"><span class="header-section-number">1.2.1</span> The working directory</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#the-solution-rstudio-projects" id="toc-the-solution-rstudio-projects" class="nav-link" data-scroll-target="#the-solution-rstudio-projects"><span class="header-section-number">1.3</span> The solution: RStudio projects</a>
+  <ul class="collapse">
+<li><a href="#creating-a-project-from-the-menu" id="toc-creating-a-project-from-the-menu" class="nav-link" data-scroll-target="#creating-a-project-from-the-menu"><span class="header-section-number">1.3.1</span> Creating a project from the menu</a></li>
+  <li><a href="#creating-a-project-from-code-the-usethis-package" id="toc-creating-a-project-from-code-the-usethis-package" class="nav-link" data-scroll-target="#creating-a-project-from-code-the-usethis-package"><span class="header-section-number">1.3.2</span> Creating a project from code: the <code>usethis</code> package</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#hands-on-the-maize-trial-project" id="toc-hands-on-the-maize-trial-project" class="nav-link" data-scroll-target="#hands-on-the-maize-trial-project"><span class="header-section-number">1.4</span> Hands on: the maize trial project</a>
+  <ul class="collapse">
+<li><a href="#step-1-create-the-project-inside-documents" id="toc-step-1-create-the-project-inside-documents" class="nav-link" data-scroll-target="#step-1-create-the-project-inside-documents"><span class="header-section-number">1.4.1</span> Step 1: create the project inside Documents</a></li>
+  <li><a href="#step-2-the-labs-folder-structure" id="toc-step-2-the-labs-folder-structure" class="nav-link" data-scroll-target="#step-2-the-labs-folder-structure"><span class="header-section-number">1.4.2</span> Step 2: the lab’s folder structure</a></li>
+  <li><a href="#step-3-put-the-data-in-dataraw" id="toc-step-3-put-the-data-in-dataraw" class="nav-link" data-scroll-target="#step-3-put-the-data-in-dataraw"><span class="header-section-number">1.4.3</span> Step 3: put the data in <code>data/raw/</code></a></li>
+  </ul>
+</li>
+  <li>
+<a href="#file-paths" id="toc-file-paths" class="nav-link" data-scroll-target="#file-paths"><span class="header-section-number">1.5</span> File paths</a>
+  <ul class="collapse">
+<li><a href="#absolute-and-relative" id="toc-absolute-and-relative" class="nav-link" data-scroll-target="#absolute-and-relative"><span class="header-section-number">1.5.1</span> Absolute and relative</a></li>
+  <li><a href="#building-paths-with-file.path" id="toc-building-paths-with-file.path" class="nav-link" data-scroll-target="#building-paths-with-file.path"><span class="header-section-number">1.5.2</span> Building paths with <code>file.path()</code></a></li>
+  <li><a href="#the-here-package" id="toc-the-here-package" class="nav-link" data-scroll-target="#the-here-package"><span class="header-section-number">1.5.3</span> The <code>here</code> package</a></li>
+  <li><a href="#step-4-read-the-data-from-inside-the-project" id="toc-step-4-read-the-data-from-inside-the-project" class="nav-link" data-scroll-target="#step-4-read-the-data-from-inside-the-project"><span class="header-section-number">1.5.4</span> Step 4: read the data from inside the project</a></li>
+  </ul>
+</li>
+  <li><a href="#failing-on-purpose-cannot-open-file" id="toc-failing-on-purpose-cannot-open-file" class="nav-link" data-scroll-target="#failing-on-purpose-cannot-open-file"><span class="header-section-number">1.6</span> Failing on purpose: “cannot open file”</a></li>
+  <li><a href="#clean-sessions-never-save-.rdata" id="toc-clean-sessions-never-save-.rdata" class="nav-link" data-scroll-target="#clean-sessions-never-save-.rdata"><span class="header-section-number">1.7</span> Clean sessions: never save <code>.RData</code></a></li>
+  <li><a href="#organising-a-script" id="toc-organising-a-script" class="nav-link" data-scroll-target="#organising-a-script"><span class="header-section-number">1.8</span> Organising a script</a></li>
+  <li>
+<a href="#under-the-hood" id="toc-under-the-hood" class="nav-link" data-scroll-target="#under-the-hood"><span class="header-section-number">1.9</span> Under the hood</a>
+  <ul class="collapse">
+<li><a href="#what-is-inside-a-.rproj" id="toc-what-is-inside-a-.rproj" class="nav-link" data-scroll-target="#what-is-inside-a-.rproj"><span class="header-section-number">1.9.1</span> What is inside a <code>.Rproj</code></a></li>
+  <li><a href="#how-here-finds-the-root" id="toc-how-here-finds-the-root" class="nav-link" data-scroll-target="#how-here-finds-the-root"><span class="header-section-number">1.9.2</span> How <code>here</code> finds the root</a></li>
+  <li><a href="#why-rmlist-ls-is-not-enough" id="toc-why-rmlist-ls-is-not-enough" class="nav-link" data-scroll-target="#why-rmlist-ls-is-not-enough"><span class="header-section-number">1.9.3</span> Why <code>rm(list = ls())</code> is not enough</a></li>
+  <li><a href="#the-tilde-and-your-home-path" id="toc-the-tilde-and-your-home-path" class="nav-link" data-scroll-target="#the-tilde-and-your-home-path"><span class="header-section-number">1.9.4</span> The tilde <code>~</code> and your home path</a></li>
+  </ul>
+</li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">1.10</span> Exercises</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul></nav>
+</div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.en.html">Module 1 — Foundations, data and the Zen of R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.en.html"><span class="chapter-number">1</span>  <span class="chapter-title">Projects: the unit of work in R</span></a></li>
+</ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-projetos" class="quarto-section-identifier"><span class="chapter-number">1</span>  <span class="chapter-title">Projects: the unit of work in R</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><blockquote class="blockquote">
+<p><em>“If the first line of your script is <code>setwd()</code>, I will come to your computer and set it on fire.”</em> A light-hearted paraphrase of Jenny Bryan <span class="citation" data-cites="bryan2017workflow">(<a href="../references.en.html#ref-bryan2017workflow" role="doc-biblioref">Bryan 2017</a>)</span></p>
+</blockquote>
+<section id="lesson-goals" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="lesson-goals">Lesson goals</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol type="1">
+<li>Explain why, in the lab, <strong>all R work happens inside a project</strong> rather than in loose scripts.</li>
+<li>Create an RStudio project from the menu and from code, with the QGSL Lab’s standard folder structure.</li>
+<li>Tell absolute paths from relative paths and understand the role of the working directory.</li>
+<li>Read a data file reproducibly with the <code>here</code> package.</li>
+<li>Diagnose the most common beginner error: <code>cannot open file ... No such file or directory</code>.</li>
+<li>Configure RStudio to always start with a clean session.</li>
+</ol>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Live lesson plan (60 min)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Time</th>
+<th>Activity</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>0–5</td>
+<td>Introduction to the course and the bilingual book</td>
+</tr>
+<tr class="even">
+<td>5–15</td>
+<td>The problem with loose scripts: <code>setwd()</code> and the working directory</td>
+</tr>
+<tr class="odd">
+<td>15–30</td>
+<td>Creating the trial project (<code>usethis</code>), the folders and the data in <code>data/raw/</code>
+</td>
+</tr>
+<tr class="even">
+<td>30–45</td>
+<td>Paths with <code>here</code> and the first data file; the “cannot open file” error</td>
+</tr>
+<tr class="odd">
+<td>45–55</td>
+<td>Clean sessions, organising scripts and exercise 1</td>
+</tr>
+<tr class="even">
+<td>55–60</td>
+<td>Summary and homework</td>
+</tr>
+</tbody>
+</table>
+<p>The “Under the hood” sections and exercises 3 and 4 are for self-study.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A note on names in the code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The course data are shared by both language versions, so data files and column names stay in Portuguese (for example <code>produtividade_t_ha</code>, yield in t/ha, and <code>hibrido</code>, hybrid). Objects we create ourselves get English names. A Portuguese–English glossary will be available in the appendices.</p>
+</div>
+</div>
+</section><section id="setting-up-your-environment" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="setting-up-your-environment">
+<span class="header-section-number">1.1</span> Setting up your environment</h2>
+<section id="what-needs-to-be-installed" class="level3" data-number="1.1.1"><h3 data-number="1.1.1" class="anchored" data-anchor-id="what-needs-to-be-installed">
+<span class="header-section-number">1.1.1</span> What needs to be installed</h3>
+<p>We will use four tools throughout the course. Each plays a different role:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Tool</th>
+<th>Role</th>
+<th>Where to get it</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>R</strong></td>
+<td>The language and the interpreter that runs the code</td>
+<td><a href="https://cran.r-project.org" class="uri">https://cran.r-project.org</a></td>
+</tr>
+<tr class="even">
+<td><strong>RStudio</strong></td>
+<td>The integrated development environment (IDE): editor, console, file and project manager</td>
+<td><a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Quarto</strong></td>
+<td>The publishing system that turns text + code into reports, books and websites (this book is built with Quarto)</td>
+<td>Ships with RStudio; also at <a href="https://quarto.org" class="uri">https://quarto.org</a>
+</td>
+</tr>
+<tr class="even">
+<td><strong>Git</strong></td>
+<td>Version control, which records the history of every file in the project</td>
+<td><a href="https://git-scm.com" class="uri">https://git-scm.com</a></td>
+</tr>
+</tbody>
+</table>
+<p>An important distinction: <strong>R and RStudio are not the same thing</strong>. R is the engine; RStudio is the dashboard. You can use R without RStudio (from the terminal or other editors such as VS Code or Positron), but you cannot use RStudio without R.</p>
+<p>To check what is installed, run in the console:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>R.version.string            <span class="co"># R version</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">RStudio.Version</span>()<span class="sc">$</span>version   <span class="co"># RStudio version (only works inside RStudio)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>quarto<span class="sc">::</span><span class="fu">quarto_version</span>()    <span class="co"># Quarto version</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"git --version"</span>)     <span class="co"># Git version</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>R.version.string</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "R version 4.6.1 (2026-06-24)"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="callout callout-style-simple callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Keep R up to date
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>New packages often require recent versions of R. A rule of thumb for the lab: update R at least once a year, shortly after the <code>x.y.0</code> release (usually in April), and reinstall your packages afterwards.</p>
+</div>
+</div>
+</section><section id="a-tour-of-rstudio" class="level3" data-number="1.1.2"><h3 data-number="1.1.2" class="anchored" data-anchor-id="a-tour-of-rstudio">
+<span class="header-section-number">1.1.2</span> A tour of RStudio</h3>
+<p>When you open RStudio you will see four panes:</p>
+<ol type="1">
+<li>
+<strong>Editor</strong> (top left): where you write and save scripts (<code>.R</code>) and Quarto documents (<code>.qmd</code>). This is where the real work happens.</li>
+<li>
+<strong>Console</strong> (bottom left): where R runs commands. Great for quick tests, terrible for keeping work, because nothing you type there is saved in an organised way.</li>
+<li>
+<strong>Environment / History / Git</strong> (top right): shows the objects in the session’s memory, the command history and, once we enable Git, the state of the files.</li>
+<li>
+<strong>Files / Plots / Packages / Help / Viewer</strong> (bottom right): file browser, plots, installed packages and documentation.</li>
+</ol>
+<p>Two shortcuts you will use hundreds of times per lesson:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Shortcut</th>
+<th>What it does</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>Ctrl + Enter</code> (<code>Cmd + Enter</code> on a Mac)</td>
+<td>Runs the current line (or selection) of the editor in the console</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl + Shift + F10</code></td>
+<td>Restarts the R session (we will see why this matters)</td>
+</tr>
+</tbody>
+</table></section></section><section id="the-problem-loose-scripts" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="the-problem-loose-scripts">
+<span class="header-section-number">1.2</span> The problem: loose scripts</h2>
+<p>Imagine a lab colleague sends you this script to analyse a maize trial:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/joao/Desktop/phd/analyses/maize_2025"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ensaio_milho_piloto.csv"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>produtividade_t_ha)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>This script looks harmless, but it has two serious problems:</p>
+<ol type="1">
+<li>
+<strong><code>setwd()</code> with an absolute path.</strong> The path <code>C:/Users/joao/Desktop/...</code> only exists on João’s computer. On your computer, on the lab server, or on João’s own computer two years from now (after a reinstall), the script fails on its second line.</li>
+<li>
+<strong><code>rm(list = ls())</code> gives a false sense of cleanliness.</strong> That line deletes the objects in the <em>Environment</em>, but it does not unload packages, does not restore options changed with <code>options()</code> and does not undo changes to environment variables. The script may work in your “dirty” session and fail in someone else’s.</li>
+</ol>
+<section id="the-working-directory" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="the-working-directory">
+<span class="header-section-number">1.2.1</span> The working directory</h3>
+<p>To understand the first problem we need one concept: the <strong>working directory</strong>. It is the folder from which R interprets every relative path. You can query it with <code>getwd()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "/home/ana/projects/R_Course"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>When you write <code>read.csv("ensaio_milho_piloto.csv")</code>, R looks for the file <strong>inside the working directory</strong>. If the file is somewhere else, R cannot find it. <code>setwd()</code> changes the working directory, which is why it looks like the solution. But it ties the script to one specific machine.</p>
+<p>The right question is not “how do I make R find my folder?” but “how do I make sure that <strong>anyone, on any computer</strong>, can run my code without editing anything?”. The answer is the project.</p>
+</section></section><section id="the-solution-rstudio-projects" class="level2" data-number="1.3"><h2 data-number="1.3" class="anchored" data-anchor-id="the-solution-rstudio-projects">
+<span class="header-section-number">1.3</span> The solution: RStudio projects</h2>
+<p>An <strong>RStudio project</strong> is a folder containing a <code>.Rproj</code> file. When you open that file (double-click it, or use <em>File &gt; Open Project</em>), RStudio:</p>
+<ul>
+<li>starts a fresh R session;</li>
+<li>sets the <strong>working directory to the project folder</strong>, automatically;</li>
+<li>keeps history, open tabs and settings separate for each project.</li>
+</ul>
+<p>As a result, every path in the code can be written <strong>relative to the project root</strong>, and the same code works on any computer that has a copy of the folder.</p>
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Lab rule
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the QGSL Lab, <strong>every analysis lives inside a project</strong>. A research question, a paper, a thesis or a course: each one is a project, with its own folder, its own <code>.Rproj</code> and its own Git repository. Loose scripts on the desktop are not accepted in code reviews.</p>
+</div>
+</div>
+<section id="creating-a-project-from-the-menu" class="level3" data-number="1.3.1"><h3 data-number="1.3.1" class="anchored" data-anchor-id="creating-a-project-from-the-menu">
+<span class="header-section-number">1.3.1</span> Creating a project from the menu</h3>
+<ol type="1">
+<li><em>File &gt; New Project…</em></li>
+<li>Choose <em>New Directory &gt; New Project</em>.</li>
+<li>Give it a name with no spaces and no accents (for example <code>maize_trial_2025</code>) and choose where the folder will be created.</li>
+<li>Tick <em>Create a git repository</em> (we will use it from lesson 9 onwards).</li>
+<li>Click <em>Create Project</em>.</li>
+</ol>
+<p>RStudio restarts inside the new project. Notice that the project name appears in the top-right corner of the window.</p>
+</section><section id="creating-a-project-from-code-the-usethis-package" class="level3" data-number="1.3.2"><h3 data-number="1.3.2" class="anchored" data-anchor-id="creating-a-project-from-code-the-usethis-package">
+<span class="header-section-number">1.3.2</span> Creating a project from code: the <code>usethis</code> package</h3>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Package intent: <code>usethis</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problem it solves.</strong> Project setup tasks (creating the structure, enabling Git, configuring GitHub, adding a licence, creating standard files) are repetitive and easy to get wrong by hand.</p>
+<p><strong>Philosophy.</strong> <code>usethis</code> automates these tasks with self-explanatory function names (<code>use_git()</code>, <code>use_readme_md()</code>, <code>create_project()</code>), always telling you what it did and what you still need to do. It belongs to the development toolchain maintained by the tidyverse team (together with <code>devtools</code>, <code>roxygen2</code> and <code>testthat</code>).</p>
+<p><strong>Why this one and not the alternatives.</strong> The alternative is clicking through RStudio menus or creating folders and files by hand. The menu works fine for one project; <code>usethis</code> wins when we want to standardise dozens of lab projects and record the setup as code, which is reproducible by definition. We will return to it in lesson 9 (Git and GitHub) and in the appendix on building the lab package.</p>
+</div>
+</div>
+<p>The function <code>usethis::create_project()</code> creates the folder, the <code>.Rproj</code> file and a basic <code>.gitignore</code>, and then <strong>opens the new project</strong> in RStudio. We will use it to create the project for the maize pilot trial. <strong>The rest of this lesson is done from inside that project</strong>, exactly as you will work on your own analyses.</p>
+</section></section><section id="hands-on-the-maize-trial-project" class="level2" data-number="1.4"><h2 data-number="1.4" class="anchored" data-anchor-id="hands-on-the-maize-trial-project">
+<span class="header-section-number">1.4</span> Hands on: the maize trial project</h2>
+<section id="step-1-create-the-project-inside-documents" class="level3" data-number="1.4.1"><h3 data-number="1.4.1" class="anchored" data-anchor-id="step-1-create-the-project-inside-documents">
+<span class="header-section-number">1.4.1</span> Step 1: create the project inside Documents</h3>
+<p>We will create the <code>maize_trial_2025</code> project inside your <strong>Documents</strong> folder. That folder’s path changes from one operating system to another:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>System</th>
+<th>Documents folder</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>macOS</td>
+<td>
+<code>~/Documents</code> (that is, <code>/Users/your_user/Documents</code>)</td>
+</tr>
+<tr class="even">
+<td>Linux Ubuntu</td>
+<td>
+<code>~/Documents</code>, or <code>~/Documentos</code> if the system was installed in Portuguese</td>
+</tr>
+<tr class="odd">
+<td>Windows</td>
+<td><code>C:/Users/your_user/Documents</code></td>
+</tr>
+</tbody>
+</table>
+<p>In the RStudio console, run <strong>only the line for your system</strong>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_project</span>(<span class="st">"~/Documents/maize_trial_2025"</span>)                     <span class="co"># macOS and Linux</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_project</span>(<span class="st">"C:/Users/your_user/Documents/maize_trial_2025"</span>)    <span class="co"># Windows (replace your_user)</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>If you prefer, let R work out where your Documents folder is. <code>Sys.info()[["sysname"]]</code> returns <code>"Darwin"</code> on macOS, <code>"Linux"</code> on Linux and <code>"Windows"</code> on Windows; on Linux, the <code>xdg-user-dir</code> command reports the folder name in the system’s language:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>documents_dir <span class="ot">&lt;-</span> <span class="cf">switch</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.info</span>()[[<span class="st">"sysname"</span>]],</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Darwin  =</span> <span class="st">"~/Documents"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Linux   =</span> <span class="fu">system</span>(<span class="st">"xdg-user-dir DOCUMENTS"</span>, <span class="at">intern =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Windows =</span> <span class="fu">file.path</span>(<span class="fu">Sys.getenv</span>(<span class="st">"USERPROFILE"</span>), <span class="st">"Documents"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_project</span>(<span class="fu">file.path</span>(documents_dir, <span class="st">"maize_trial_2025"</span>))</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>RStudio opens a <strong>new session</strong>, already inside the project: the name <code>maize_trial_2025</code> appears in the top-right corner and the <em>Files</em> pane shows the project folder. Any objects you had created stayed in the previous session; from now on, all code in this lesson must be typed <strong>in this new session</strong>. Check:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "/home/ana/Documents/maize_trial_2025"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_tree</span>(<span class="at">all =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="cell">
+<pre><code>#&gt; .
+#&gt; ├── .gitignore
+#&gt; ├── R
+#&gt; └── maize_trial_2025.Rproj</code></pre>
+</div>
+<p>Notice three details:</p>
+<ul>
+<li>
+<code>maize_trial_2025.Rproj</code> is the file that marks the folder as a project. Next time, just double-click it to get back to the project.</li>
+<li>
+<code>.gitignore</code> lists files Git should ignore (for example <code>.Rhistory</code> and <code>.RData</code>).</li>
+<li>The <code>R/</code> folder is created by default; in the lab it holds reusable <strong>functions</strong>, while analyses go in <code>scripts/</code>.</li>
+</ul>
+<p>The <code>::</code> operator (as in <code>usethis::create_project</code>) calls a function from a package <strong>without loading the whole package</strong> with <code>library()</code>. We will use this form whenever a package function appears only once, because it makes explicit where the function comes from.</p>
+</section><section id="step-2-the-labs-folder-structure" class="level3" data-number="1.4.2"><h3 data-number="1.4.2" class="anchored" data-anchor-id="step-2-the-labs-folder-structure">
+<span class="header-section-number">1.4.2</span> Step 2: the lab’s folder structure</h3>
+<p>Every QGSL Lab analysis follows the same structure. Still in the new project’s console, create the folders:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>folders <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/raw"</span>,        <span class="co"># raw data, exactly as they came from the field or the lab</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data/processed"</span>,  <span class="co"># clean data, produced by the scripts</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scripts"</span>,         <span class="co"># analyses, numbered in the order they run</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"R"</span>,               <span class="co"># reusable functions</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"output/figures"</span>,  <span class="co"># generated plots</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"output/tables"</span>,   <span class="co"># generated tables</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"reports"</span>          <span class="co"># Quarto reports</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(folders)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_tree</span>()</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="cell">
+<pre><code>#&gt; .
+#&gt; ├── R
+#&gt; ├── data
+#&gt; │   ├── processed
+#&gt; │   └── raw
+#&gt; ├── maize_trial_2025.Rproj
+#&gt; ├── output
+#&gt; │   ├── figures
+#&gt; │   └── tables
+#&gt; ├── reports
+#&gt; └── scripts</code></pre>
+</div>
+<p>Notice that the paths are <strong>relative</strong>: <code>fs::dir_create("data/raw")</code> creates the folder inside the working directory, which is the project root. This course’s own repository follows the same structure, with a <code>chapters/</code> folder instead of <code>reports/</code>.</p>
+<p>Three rules give this structure its meaning:</p>
+<ol type="1">
+<li>
+<strong>Raw data are read-only.</strong> Never edit a file in <code>data/raw/</code> by hand, not even in Excel. Every correction is made in code, which writes the result to <code>data/processed/</code>. That way every correction is documented and can be redone.</li>
+<li>
+<strong>Everything in <code>data/processed/</code> and <code>output/</code> can be deleted and recreated</strong> by running the scripts. If it cannot, some step of the analysis is not in the code.</li>
+<li>
+<strong>Scripts are numbered in the order they run</strong>: <code>A01_import.R</code>, <code>A02_clean.R</code>, <code>A03_model.R</code>. Anyone joining the project knows where to start. The letter before the number is a lab convention: a script name <strong>never starts with a number</strong>, and the <code>A01_</code>, <code>A02_</code>… prefix keeps the running order in the file listing.</li>
+</ol></section><section id="step-3-put-the-data-in-dataraw" class="level3" data-number="1.4.3"><h3 data-number="1.4.3" class="anchored" data-anchor-id="step-3-put-the-data-in-dataraw">
+<span class="header-section-number">1.4.3</span> Step 3: put the data in <code>data/raw/</code>
+</h3>
+<p>Download the pilot trial file: <a href="../data/raw/ensaio_milho_piloto.csv">ensaio_milho_piloto.csv</a> (right-click and choose <em>Save link as</em> if the browser opens the file instead of downloading it). The file name is Portuguese for “maize pilot trial”; the data are shared by both language versions of the book.</p>
+<p>The browser saves the file in your downloads folder, which is <strong>not</strong> part of the project. It has to go to <code>data/raw/</code>. You can drag it in the file manager or, better, move it from R, in the project’s console:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="st">"~/Downloads/ensaio_milho_piloto.csv"</span>,   <span class="co"># where the browser saved it</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="st">"data/raw/"</span>                                 <span class="co"># into the project</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">"data/raw"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ensaio_milho_piloto.csv"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>On Windows, the downloads folder is <code>C:/Users/your_user/Downloads</code>. If <code>file.copy()</code> returns <code>FALSE</code>, the file was not found at the source path: check the name and folder with <code>list.files("~/Downloads")</code>.</p>
+</section></section><section id="file-paths" class="level2" data-number="1.5"><h2 data-number="1.5" class="anchored" data-anchor-id="file-paths">
+<span class="header-section-number">1.5</span> File paths</h2>
+<section id="absolute-and-relative" class="level3" data-number="1.5.1"><h3 data-number="1.5.1" class="anchored" data-anchor-id="absolute-and-relative">
+<span class="header-section-number">1.5.1</span> Absolute and relative</h3>
+<p>An <strong>absolute path</strong> starts at the root of the file system and identifies the file unambiguously, but only on that machine:</p>
+<pre><code>/home/ana/projects/R_Course/data/raw/ensaio_milho_piloto.csv    # Linux
+/Users/ana/projects/R_Course/data/raw/ensaio_milho_piloto.csv   # macOS
+C:/Users/ana/projects/R_Course/data/raw/ensaio_milho_piloto.csv # Windows</code></pre>
+<p>A <strong>relative path</strong> describes where the file is <strong>starting from the working directory</strong>:</p>
+<pre><code>data/raw/ensaio_milho_piloto.csv</code></pre>
+<p>Inside a project, the working directory is the project root, so the relative path works on any computer.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Always use the forward slash <code>/</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R accepts the forward slash <code>/</code> on every system, including Windows. The backslash <code>\</code> has to be doubled inside strings (<code>"C:\\Users"</code>), because it has a special meaning there. Use <code>/</code> and avoid the problem altogether.</p>
+</div>
+</div>
+</section><section id="building-paths-with-file.path" class="level3" data-number="1.5.2"><h3 data-number="1.5.2" class="anchored" data-anchor-id="building-paths-with-file.path">
+<span class="header-section-number">1.5.2</span> Building paths with <code>file.path()</code>
+</h3>
+<p>Instead of pasting text together, use <code>file.path()</code>, which inserts the correct separator:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.path</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "data/raw/ensaio_milho_piloto.csv"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="the-here-package" class="level3" data-number="1.5.3"><h3 data-number="1.5.3" class="anchored" data-anchor-id="the-here-package">
+<span class="header-section-number">1.5.3</span> The <code>here</code> package</h3>
+<p>One subtle problem remains. The working directory is not always the project root. When Quarto renders a report, for instance, the working directory becomes <strong>the report’s folder</strong>. If your report lives in <code>reports/</code>, during rendering the relative path <code>data/raw/ensaio_milho_piloto.csv</code> would not exist (R would look for it in <code>reports/data/raw/</code>).</p>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Package intent: <code>here</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problem it solves.</strong> Building paths that always point to the same place, no matter where the code runs (console, script, Quarto document in a subfolder, server), without <code>setwd()</code> and without absolute paths.</p>
+<p><strong>Philosophy.</strong> <code>here</code> finds the <strong>project root</strong> by searching from the current directory up through the parent folders for files that mark a project (a <code>.Rproj</code>, a <code>.git</code> folder, a <code>.here</code> file, among others). The <code>here()</code> function returns paths starting from that root. It is deliberately tiny: it does one thing, and does it well.</p>
+<p><strong>Why this one and not the alternatives.</strong></p>
+<ul>
+<li>
+<code>setwd()</code>: ties the code to one computer; ruled out for the reasons above.</li>
+<li>Plain relative paths: work in the console but break when the working directory changes (as in Quarto documents in subfolders).</li>
+<li>
+<code>rprojroot</code>: the engine behind <code>here</code>, more flexible but more verbose. <code>here</code> offers the same robustness through a one-function interface.</li>
+</ul>
+</div>
+</div>
+</section><section id="step-4-read-the-data-from-inside-the-project" class="level3" data-number="1.5.4"><h3 data-number="1.5.4" class="anchored" data-anchor-id="step-4-read-the-data-from-inside-the-project">
+<span class="header-section-number">1.5.4</span> Step 4: read the data from inside the project</h3>
+<p>In the <code>maize_trial_2025</code> project console, load <code>here</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; here() starts at /home/ana/Documents/maize_trial_2025</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>The message <code>here() starts at ...</code> shows which folder <code>here</code> recognised as the root. Always check that line when you open a new project.</p>
+<p>To build the path to the data file, pass each piece as an argument:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(data_path)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Now we read the file. In lesson 5 we will meet the <code>readr</code> package and its advantages; for now we use <code>read.csv()</code>, which ships with R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>trial <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trial)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   hibrido bloco produtividade_t_ha altura_planta_cm</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    HB01     1               9.54              225</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    HB01     2               9.93              220</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    HB01     3               8.64              201</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    HB02     1               9.04              213</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5    HB02     2               9.00              204</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6    HB02     3               8.86              220</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>This code works the same in the console, in a script in <code>scripts/</code> and in a report in <code>reports/</code>, on any computer that has a copy of the project. That is exactly what we wanted. (This book is also a project with the same structure, which is why the results shown here are the same ones you get in yours.)</p>
+<p>A few quick questions for our pilot trial:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(trial)                         <span class="co"># how many plots?</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 36</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(trial<span class="sc">$</span>hibrido)               <span class="co"># which hybrids?</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] "HB01" "HB02" "HB03" "HB04" "HB05" "HB06" "HB07" "HB08" "HB09" "HB10"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11] "HB11" "HB12"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(trial<span class="sc">$</span>produtividade_t_ha)      <span class="co"># mean yield (t/ha)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 9.061111</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(trial<span class="sc">$</span>altura_planta_cm)     <span class="co"># summary of plant height (cm)</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   193.0   203.0   212.5   212.6   220.0   240.0</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section></section><section id="failing-on-purpose-cannot-open-file" class="level2" data-number="1.6"><h2 data-number="1.6" class="anchored" data-anchor-id="failing-on-purpose-cannot-open-file">
+<span class="header-section-number">1.6</span> Failing on purpose: “cannot open file”</h2>
+<p>The most common error for R beginners is this one:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"ensaio_milho_piloto.csv"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in file(file, "rt"): cannot open file 'ensaio_milho_piloto.csv': No</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; such file or directory</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in `file()`:</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! cannot open the connection</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Read the message carefully. It says two things:</p>
+<ul>
+<li>
+<strong><code>cannot open file 'ensaio_milho_piloto.csv'</code></strong>: R could not open a file at that path.</li>
+<li>
+<strong><code>No such file or directory</code></strong>: the reason is that, starting from the current working directory, no file with that name exists.</li>
+</ul>
+<p>A diagnostic routine that solves almost every case:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Where is R looking?</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "/home/ana/Documents/maize_trial_2025"</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Is the file where I think it is?</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>))</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. What is actually in the folder? (typos and extensions show up here)</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>))</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ensaio_milho_piloto.csv"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>The file exists and is in the right place: the problem is that <code>read.csv("ensaio_milho_piloto.csv")</code> looked for it at the project root, not in <code>data/raw/</code>.</p>
+<p>The most frequent causes, in order:</p>
+<ol type="1">
+<li>The path is relative to the wrong place (missing <code>here()</code> or the <code>data/raw</code> folder).</li>
+<li>A typo in the name or the extension (<code>.csv</code> vs <code>.CSV</code> vs <code>.xlsx</code>). On Linux and macOS, upper and lower case matter.</li>
+<li>The project is not open, and the working directory is the user’s home folder.</li>
+<li>The file stayed in the downloads folder and was never moved to <code>data/raw/</code>.</li>
+</ol></section><section id="clean-sessions-never-save-.rdata" class="level2" data-number="1.7"><h2 data-number="1.7" class="anchored" data-anchor-id="clean-sessions-never-save-.rdata">
+<span class="header-section-number">1.7</span> Clean sessions: never save <code>.RData</code>
+</h2>
+<p>By default, when you close RStudio it asks <em>Save workspace image to ~/.RData?</em>. If you answer “yes”, every object in the session is saved and <strong>silently comes back</strong> next time. That looks convenient, but it is the main source of analyses that “work on my machine”: the result depends on objects that no script creates.</p>
+<p>The lab rule is: <strong>the code is the source of truth, not the session</strong>. Every object must be recreatable by running the scripts from start to finish in a fresh session.</p>
+<p>Set this up once and for all:</p>
+<ul>
+<li>In RStudio: <em>Tools &gt; Global Options &gt; General</em>, untick <em>Restore .RData into workspace at startup</em> and choose <em>Never</em> for <em>Save workspace to .RData on exit</em>.</li>
+<li>Or from code:</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_blank_slate</span>()</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>And adopt the habit: before you consider an analysis finished, <strong>restart the session</strong> (<code>Ctrl + Shift + F10</code>) and run the whole script. If it works, it is reproducible.</p>
+</section><section id="organising-a-script" class="level2" data-number="1.8"><h2 data-number="1.8" class="anchored" data-anchor-id="organising-a-script">
+<span class="header-section-number">1.8</span> Organising a script</h2>
+<p>A lab script always has the same anatomy. Here is an example you can save as <code>scripts/A01_explore_pilot.R</code> in the <code>maize_trial_2025</code> project (<em>File &gt; New File &gt; R Script</em>, then save it in the <code>scripts/</code> folder):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial exploration of the maize pilot trial ---------------------------------</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: Your Name</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Goal: check that the data are read correctly and compute basic summaries.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages ---------------------------------------------------------------------</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Data -------------------------------------------------------------------------</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>trial <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>))</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Summaries --------------------------------------------------------------------</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(trial<span class="sc">$</span>produtividade_t_ha)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(trial<span class="sc">$</span>produtividade_t_ha, trial<span class="sc">$</span>hibrido, mean)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<ul>
+<li>The header says <strong>what</strong> the script does and <strong>why</strong>.</li>
+<li>Packages are loaded <strong>at the top</strong>, all together. A reader immediately knows what the script depends on.</li>
+<li>Lines ending in <code>----</code> create navigable <strong>sections</strong> in RStudio (<code>Ctrl + Shift + R</code> inserts one). Use the section menu at the bottom of the editor to jump between them.</li>
+<li>There is no <code>setwd()</code> and no <code>rm(list = ls())</code>.</li>
+</ul></section><section id="under-the-hood" class="level2" data-number="1.9"><h2 data-number="1.9" class="anchored" data-anchor-id="under-the-hood">
+<span class="header-section-number">1.9</span> Under the hood</h2>
+<section id="what-is-inside-a-.rproj" class="level3" data-number="1.9.1"><h3 data-number="1.9.1" class="anchored" data-anchor-id="what-is-inside-a-.rproj">
+<span class="header-section-number">1.9.1</span> What is inside a <code>.Rproj</code>
+</h3>
+<p>The <code>.Rproj</code> file is a plain text file with the project options. Since the working directory is the project root, the file name is enough:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">readLines</span>(<span class="st">"maize_trial_2025.Rproj"</span>)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="cell">
+<pre><code>#&gt;  [1] "Version: 1.0"                 ""                            
+#&gt;  [3] "RestoreWorkspace: No"         "SaveWorkspace: No"           
+#&gt;  [5] "AlwaysSaveHistory: Default"   ""                            
+#&gt;  [7] "EnableCodeIndexing: Yes"      "Encoding: UTF-8"             
+#&gt;  [9] ""                             "AutoAppendNewline: Yes"      
+#&gt; [11] "StripTrailingWhitespace: Yes" "LineEndingConversion: Posix" 
+#&gt; [13] ""</code></pre>
+</div>
+<p>RStudio uses these options (for example <code>RestoreWorkspace: No</code>) and creates next to it a hidden <code>.Rproj.user/</code> folder with the interface state (open tabs, history). That folder is personal and never goes into Git.</p>
+</section><section id="how-here-finds-the-root" class="level3" data-number="1.9.2"><h3 data-number="1.9.2" class="anchored" data-anchor-id="how-here-finds-the-root">
+<span class="header-section-number">1.9.2</span> How <code>here</code> finds the root</h3>
+<p><code>here</code> walks up the folder tree from the working directory until it finds a project marker. The <code>dr_here()</code> function explains its reasoning:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">dr_here</span>()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; here() starts at /home/ana/Documents/maize_trial_2025.</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - This directory contains a file matching "[.]Rproj$" with contents matching</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   "^Version: " in the first line</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - Initial working directory: /home/ana/Documents/maize_trial_2025/reports</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - Current working directory: /home/ana/Documents/maize_trial_2025/reports</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>In this example, <code>dr_here()</code> was called while rendering a report in <code>reports/</code>: the working directory was <code>reports/</code>, and <code>here</code> still found the root through the <code>.Rproj</code>. The root is determined <strong>only once</strong>, when the package is loaded. So if you switch projects, restart the session.</p>
+</section><section id="why-rmlist-ls-is-not-enough" class="level3" data-number="1.9.3"><h3 data-number="1.9.3" class="anchored" data-anchor-id="why-rmlist-ls-is-not-enough">
+<span class="header-section-number">1.9.3</span> Why <code>rm(list = ls())</code> is not enough</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()   <span class="co"># the "here" package is still attached to the session</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] ".GlobalEnv"        "package:here"      "package:stats"  ...</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p><code>ls()</code> only lists the objects in the global environment. Loaded packages, options and environment variables survive. The only real clean-up is <strong>restarting the session</strong>.</p>
+</section><section id="the-tilde-and-your-home-path" class="level3" data-number="1.9.4"><h3 data-number="1.9.4" class="anchored" data-anchor-id="the-tilde-and-your-home-path">
+<span class="header-section-number">1.9.4</span> The tilde <code>~</code> and your home path</h3>
+<p>The tilde <code>~</code> is a shortcut for your home folder. <code>path.expand()</code> shows where it points:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">path.expand</span>(<span class="st">"~/projects"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "/home/ana/projects"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>It is handy in the console for opening projects, but it is still a user-specific path and <strong>must not appear inside analysis scripts</strong>.</p>
+</section></section><section id="exercises" class="level2" data-number="1.10"><h2 data-number="1.10" class="anchored" data-anchor-id="exercises">
+<span class="header-section-number">1.10</span> Exercises</h2>
+<ol type="1">
+<li>
+<strong>Your first project.</strong> Using the RStudio menu, create a project called <code>r_course_exercises</code> and, inside it, the folders <code>data/raw</code>, <code>data/processed</code>, <code>scripts</code> and <code>R</code>. Check the result in the <em>Files</em> pane.</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>After creating the project from the menu (<em>File &gt; New Project &gt; New Directory &gt; New Project</em>), run in the new project’s console:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fs<span class="sc">::</span><span class="fu">dir_create</span>(<span class="fu">c</span>(<span class="st">"data/raw"</span>, <span class="st">"data/processed"</span>, <span class="st">"scripts"</span>, <span class="st">"R"</span>))</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Since the working directory is the project root, the relative paths already point to the right place.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>
+<strong>Fix João’s script.</strong> Rewrite the script below so that it works on any computer, assuming the file is in <code>data/raw/</code> inside the project.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/Users/joao/Desktop/phd/analyses/maize_2025"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ensaio_milho_piloto.csv"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>produtividade_t_ha)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"ensaio_milho_piloto.csv"</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>produtividade_t_ha)</span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>We removed <code>rm(list = ls())</code> (replaced by the habit of restarting the session) and <code>setwd()</code> (replaced by the project + <code>here</code>).</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>
+<strong>Diagnosis.</strong> Run <code>read.csv(here("data", "raw", "ensaio_milho_piloto.CSV"))</code>, with the extension in upper case. What happens on your operating system? Use <code>list.files()</code> to find the correct name.</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>On Linux and macOS (with the default case-sensitive file system) R returns <code>cannot open file ... No such file or directory</code>, because <code>.CSV</code> and <code>.csv</code> are different names. On Windows the read works, because the file system does not distinguish upper from lower case. One more reason to write names exactly as they are on disk: the code must run on any system.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ensaio_milho_piloto.csv"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>
+<strong>Yield per hybrid.</strong> Using <code>tapply()</code>, compute the mean yield of each hybrid in the pilot trial and find out which hybrid yielded the most. (Hint: <code>sort()</code> and <code>which.max()</code>.)</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">tapply</span>(trial<span class="sc">$</span>produtividade_t_ha, trial<span class="sc">$</span>hibrido, mean)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(means, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     HB09     HB05     HB03     HB04     HB01     HB12     HB02     HB08 </span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9.660000 9.636667 9.536667 9.403333 9.370000 9.186667 8.966667 8.916667 </span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     HB10     HB11     HB07     HB06 </span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8.833333 8.786667 8.716667 7.720000</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">which.max</span>(means))</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "HB09"</span></span></code></pre></div>
+<button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>In lesson 6 we will do the same calculation with <code>dplyr::summarise()</code>, in a more readable and extensible way.</p>
+</div>
+</div>
+</div>
+</section><section id="summary" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="summary">Summary</h2>
+<ul>
+<li>All R work in the lab happens <strong>inside a project</strong> (<code>.Rproj</code>), which sets the working directory automatically.</li>
+<li>
+<strong>Never use <code>setwd()</code></strong> or absolute paths in scripts. Use paths relative to the project root, built with <code>here()</code>.</li>
+<li>Standard structure: <code>data/raw</code> (read-only), <code>data/processed</code>, <code>scripts</code>, <code>R</code>, <code>output</code>, <code>reports</code>.</li>
+<li>The <code>cannot open file ... No such file or directory</code> error is diagnosed with <code>getwd()</code>, <code>file.exists()</code> and <code>list.files()</code>.</li>
+<li>
+<strong>The code is the source of truth.</strong> Do not save <code>.RData</code>; restart the session and run everything again to check reproducibility.</li>
+</ul></section><section id="further-reading" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="further-reading">Further reading</h2>
+<ul>
+<li>
+<em>O Zen do R</em>, chapters on projects and paths <span class="citation" data-cites="cursor_zen">(<a href="../references.en.html#ref-cursor_zen" role="doc-biblioref">Trecenti and Lente 2021</a>)</span>.</li>
+<li>
+<em>R for Data Science</em>, chapter “Workflow: scripts and projects” <span class="citation" data-cites="wickham2023r4ds">(<a href="../references.en.html#ref-wickham2023r4ds" role="doc-biblioref">Wickham et al. 2023</a>)</span>.</li>
+<li>Jenny Bryan, “Project-oriented workflow” <span class="citation" data-cites="bryan2017workflow">(<a href="../references.en.html#ref-bryan2017workflow" role="doc-biblioref">Bryan 2017</a>)</span>.</li>
+</ul>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-bryan2017workflow" class="csl-entry" role="listitem">
+Bryan, Jennifer. 2017. <em>Project-Oriented Workflow</em>. <a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">https://www.tidyverse.org/blog/2017/12/workflow-vs-script/</a>.
+</div>
+<div id="ref-cursor_zen" class="csl-entry" role="listitem">
+Trecenti, Julio, and Caio Lente. 2021. <em>O Zen Do r</em>. Curso-R. <a href="https://curso-r.github.io/zen-do-r/">https://curso-r.github.io/zen-do-r/</a>.
+</div>
+<div id="ref-wickham2023r4ds" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. <em>R for Data Science</em>. 2nd ed. O’Reilly Media. <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("\/en");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../index.en.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/02-linguagem.en.html" class="pagination-link" aria-label="R as a language">
+        <span class="nav-page-text"><span class="chapter-number">2</span>  <span class="chapter-title">R as a language</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body>
+</html>

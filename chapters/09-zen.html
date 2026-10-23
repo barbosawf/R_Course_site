@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt">
+<head>
+<link rel="alternate" hreflang="pt" href="/chapters/09-zen.html" />
+<link rel="alternate" hreflang="en" href="/en/chapters/09-zen.en.html" />
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.10.18">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>9  Zen do R na prática e projeto integrador – Curso de R do QGSL Lab</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><meta name="quarto:offset" content="../">
+<link href="../references.html" rel="next">
+<link href="../chapters/08-limpeza.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script><script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5a1953863e1f72ef3b996ef827f01ca7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-2531e20ceebe0233fa76cf5b365e7f3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script><link rel="stylesheet" href="../assets/qgsl.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+<script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script><div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.html">Módulo 1 — Fundamentos, dados e o Zen do R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/09-zen.html"><span class="chapter-number">9</span>  <span class="chapter-title">Zen do R na prática e projeto integrador</span></a></li>
+</ol></nav><a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Curso de R do QGSL Lab</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo escuro"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="dropdown" id="languages-links-parent">
+<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> Português (BR)</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="../en/chapters/09-zen.en.html" id="language-link-en">English</a></li></ul>
+</div>
+<div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefácio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Módulo 1 — Fundamentos, dados e o Zen do R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-projetos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>  <span class="chapter-title">Projetos: a unidade de trabalho no R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-linguagem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>  <span class="chapter-title">R como linguagem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-estruturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>  <span class="chapter-title">Estruturas de dados</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-pacotes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>  <span class="chapter-title">Pacotes e o ecossistema</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-importacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>  <span class="chapter-title">Importação de dados</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-dplyr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>  <span class="chapter-title">Transformação com dplyr I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>  <span class="chapter-title">Dados <em>tidy</em></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-limpeza.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>  <span class="chapter-title">Limpeza de tipos especiais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-zen.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>  <span class="chapter-title">Zen do R na prática e projeto integrador</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Índice</h2>
+   
+  <ul>
+<li><a href="#objetivos-da-aula" id="toc-objetivos-da-aula" class="nav-link active" data-scroll-target="#objetivos-da-aula">Objetivos da aula</a></li>
+  <li><a href="#o-que-%C3%A9-o-zen-do-r" id="toc-o-que-é-o-zen-do-r" class="nav-link" data-scroll-target="#o-que-é-o-zen-do-r"><span class="header-section-number">9.1</span> O que é o “Zen do R”</a></li>
+  <li><a href="#estilo-de-c%C3%B3digo" id="toc-estilo-de-código" class="nav-link" data-scroll-target="#estilo-de-código"><span class="header-section-number">9.2</span> Estilo de código</a></li>
+  <li><a href="#fun%C3%A7%C3%B5es-em-r-scripts-em-scripts" id="toc-funções-em-r-scripts-em-scripts" class="nav-link" data-scroll-target="#funções-em-r-scripts-em-scripts"><span class="header-section-number">9.3</span> Funções em <code>R/</code>, scripts em <code>scripts/</code></a></li>
+  <li>
+<a href="#projeto-integrador-do-bruto-ao-resultado" id="toc-projeto-integrador-do-bruto-ao-resultado" class="nav-link" data-scroll-target="#projeto-integrador-do-bruto-ao-resultado"><span class="header-section-number">9.4</span> Projeto integrador: do bruto ao resultado</a>
+  <ul class="collapse">
+<li><a href="#etapa-1-preparar-os-dados" id="toc-etapa-1-preparar-os-dados" class="nav-link" data-scroll-target="#etapa-1-preparar-os-dados"><span class="header-section-number">9.4.1</span> Etapa 1: preparar os dados</a></li>
+  <li><a href="#etapa-2-resumir" id="toc-etapa-2-resumir" class="nav-link" data-scroll-target="#etapa-2-resumir"><span class="header-section-number">9.4.2</span> Etapa 2: resumir</a></li>
+  <li><a href="#rodando-o-fluxo" id="toc-rodando-o-fluxo" class="nav-link" data-scroll-target="#rodando-o-fluxo"><span class="header-section-number">9.4.3</span> Rodando o fluxo</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#git-e-github-a-partir-do-r" id="toc-git-e-github-a-partir-do-r" class="nav-link" data-scroll-target="#git-e-github-a-partir-do-r"><span class="header-section-number">9.5</span> Git e GitHub a partir do R</a>
+  <ul class="collapse">
+<li><a href="#configura%C3%A7%C3%A3o-inicial-uma-vez-por-computador" id="toc-configuração-inicial-uma-vez-por-computador" class="nav-link" data-scroll-target="#configuração-inicial-uma-vez-por-computador"><span class="header-section-number">9.5.1</span> Configuração inicial (uma vez por computador)</a></li>
+  <li><a href="#versionando-um-projeto" id="toc-versionando-um-projeto" class="nav-link" data-scroll-target="#versionando-um-projeto"><span class="header-section-number">9.5.2</span> Versionando um projeto</a></li>
+  </ul>
+</li>
+  <li><a href="#um-relat%C3%B3rio-quarto-que-l%C3%AA-os-resultados" id="toc-um-relatório-quarto-que-lê-os-resultados" class="nav-link" data-scroll-target="#um-relatório-quarto-que-lê-os-resultados"><span class="header-section-number">9.6</span> Um relatório Quarto que lê os resultados</a></li>
+  <li><a href="#checklist-do-zen-do-r" id="toc-checklist-do-zen-do-r" class="nav-link" data-scroll-target="#checklist-do-zen-do-r"><span class="header-section-number">9.7</span> Checklist do Zen do R</a></li>
+  <li>
+<a href="#por-baixo-do-cap%C3%B4" id="toc-por-baixo-do-capô" class="nav-link" data-scroll-target="#por-baixo-do-capô"><span class="header-section-number">9.8</span> Por baixo do capô</a>
+  <ul class="collapse">
+<li><a href="#o-que-source-faz" id="toc-o-que-source-faz" class="nav-link" data-scroll-target="#o-que-source-faz"><span class="header-section-number">9.8.1</span> O que <code>source()</code> faz</a></li>
+  <li><a href="#o-que-%C3%A9-um-commit" id="toc-o-que-é-um-commit" class="nav-link" data-scroll-target="#o-que-é-um-commit"><span class="header-section-number">9.8.2</span> O que é um commit</a></li>
+  </ul>
+</li>
+  <li><a href="#exerc%C3%ADcios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">9.9</span> Exercícios</a></li>
+  <li><a href="#resumo" id="toc-resumo" class="nav-link" data-scroll-target="#resumo">Resumo</a></li>
+  <li><a href="#para-saber-mais" id="toc-para-saber-mais" class="nav-link" data-scroll-target="#para-saber-mais">Para saber mais</a></li>
+  </ul></nav>
+</div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.html">Módulo 1 — Fundamentos, dados e o Zen do R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/09-zen.html"><span class="chapter-number">9</span>  <span class="chapter-title">Zen do R na prática e projeto integrador</span></a></li>
+</ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-zen" class="quarto-section-identifier"><span class="chapter-number">9</span>  <span class="chapter-title">Zen do R na prática e projeto integrador</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="objetivos-da-aula" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="objetivos-da-aula">Objetivos da aula</h2>
+<p>Ao final desta aula você será capaz de:</p>
+<ol type="1">
+<li>Aplicar o guia de estilo do laboratório e verificá-lo automaticamente com <code>styler</code> e <code>lintr</code>.</li>
+<li>Separar o código de um projeto em <strong>funções</strong> (<code>R/</code>) e <strong>scripts</strong> numerados (<code>scripts/</code>).</li>
+<li>Versionar o projeto com Git e publicá-lo no GitHub a partir do R.</li>
+<li>Montar um fluxo completo e reprodutível: dados brutos → dados processados → tabelas de resultados.</li>
+<li>Escrever um relatório em Quarto que lê os resultados do projeto.</li>
+</ol>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Roteiro da aula ao vivo (60 min)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Tempo</th>
+<th>Atividade</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>0–5</td>
+<td>Retomada: o que aprendemos no Módulo 1</td>
+</tr>
+<tr class="even">
+<td>5–15</td>
+<td>Estilo de código: <code>styler</code> e <code>lintr</code>
+</td>
+</tr>
+<tr class="odd">
+<td>15–25</td>
+<td>Funções em <code>R/</code> e scripts em <code>scripts/</code>
+</td>
+</tr>
+<tr class="even">
+<td>25–40</td>
+<td>Projeto integrador: rodando o fluxo do bruto ao resultado</td>
+</tr>
+<tr class="odd">
+<td>40–50</td>
+<td>Git e GitHub com <code>usethis</code>
+</td>
+</tr>
+<tr class="even">
+<td>50–55</td>
+<td>Um relatório Quarto que lê os resultados</td>
+</tr>
+<tr class="odd">
+<td>55–60</td>
+<td>Checklist do Zen do R e fechamento do módulo</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="o-que-é-o-zen-do-r" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="o-que-é-o-zen-do-r">
+<span class="header-section-number">9.1</span> O que é o “Zen do R”</h2>
+<p>Ao longo deste módulo acumulamos um conjunto de hábitos. Juntos, eles formam o que a comunidade brasileira chama de <strong>Zen do R</strong> <span class="citation" data-cites="cursor_zen">(<a href="../references.html#ref-cursor_zen" role="doc-biblioref">Trecenti e Lente 2021</a>)</span>: uma forma de organizar o trabalho para que ele seja reprodutível, legível e fácil de retomar. Os princípios que adotamos no laboratório:</p>
+<ol type="1">
+<li>
+<strong>Tudo é um projeto.</strong> Uma pasta, um <code>.Rproj</code>, um repositório Git (aula 1).</li>
+<li>
+<strong>Caminhos relativos com <code>here()</code></strong>, nunca <code>setwd()</code> (aula 1).</li>
+<li>
+<strong>Os dados brutos são sagrados.</strong> <code>data/raw/</code> é somente leitura; toda correção é código (aula 5).</li>
+<li>
+<strong>O código é a fonte da verdade.</strong> Nada de <code>.RData</code>; qualquer resultado deve ser recriado rodando os scripts em uma sessão limpa (aula 1).</li>
+<li>
+<strong>Versões registradas</strong> com <code>renv</code> (aula 4).</li>
+<li>
+<strong>Código legível:</strong> estilo consistente, nomes descritivos, funções pequenas (esta aula).</li>
+<li>
+<strong>Histórico completo</strong> com Git (esta aula).</li>
+</ol>
+<p>Esta aula fecha o módulo colocando todos esses princípios para funcionar juntos.</p>
+</section><section id="estilo-de-código" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="estilo-de-código">
+<span class="header-section-number">9.2</span> Estilo de código</h2>
+<p>Código é lido muito mais vezes do que é escrito, e quase sempre por outra pessoa (ou por você, meses depois, que é praticamente outra pessoa). Um estilo consistente reduz o esforço de leitura. O laboratório segue o <a href="https://style.tidyverse.org">guia de estilo do tidyverse</a>, cujas regras principais você já vem praticando:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Regra</th>
+<th>Sim</th>
+<th>Não</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Nomes em <code>snake_case</code>
+</td>
+<td>
+<code>prod_kg_ha</code>, <code>ler_soja_2025()</code>
+</td>
+<td>
+<code>ProdKgHa</code>, <code>ler.soja()</code>
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>&lt;-</code> para atribuir</td>
+<td><code>x &lt;- 5</code></td>
+<td><code>x = 5</code></td>
+</tr>
+<tr class="odd">
+<td>Espaços ao redor de operadores e após vírgulas</td>
+<td><code>mean(x, na.rm = TRUE)</code></td>
+<td><code>mean(x,na.rm=TRUE)</code></td>
+</tr>
+<tr class="even">
+<td>Uma etapa do pipe por linha</td>
+<td>
+<code>x |&gt;</code> ↵ <code>filter()</code>
+</td>
+<td>tudo em uma linha longa</td>
+</tr>
+<tr class="odd">
+<td>Linhas de até 80 caracteres</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Recuo de dois espaços</td>
+<td></td>
+<td>tabulações</td>
+</tr>
+</tbody>
+</table>
+<p>Ninguém precisa decorar regras de espaçamento: duas ferramentas fazem isso por você.</p>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Intenção dos pacotes: <code>styler</code> e <code>lintr</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problema que resolvem.</strong> Revisar estilo à mão é tedioso, subjetivo e desvia a atenção do que importa numa revisão de código: a lógica.</p>
+<p><strong>Filosofia.</strong> Os dois trabalham em conjunto, com papéis complementares. O <code>styler</code> <strong>corrige</strong> automaticamente a formatação (espaços, recuos, quebras de linha) sem alterar o que o código faz. O <code>lintr</code> <strong>aponta</strong> problemas que exigem decisão humana, como nomes fora do padrão, linhas longas, objetos não usados ou o uso de <code>=</code> para atribuir.</p>
+<p><strong>Por que eles e não as alternativas.</strong> São as ferramentas de referência da comunidade R, configuradas por padrão para o guia do tidyverse, integradas ao RStudio (menu <em>Addins</em>) e ao GitHub Actions. A alternativa, um formatador da própria IDE, não é padronizada entre editores e não verifica nomes nem lógica.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>codigo_baguncado <span class="ot">&lt;-</span> <span class="st">"media&lt;-function(x,remover_na=TRUE){</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">if(remover_na){x=x[!is.na(x)]}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">sum( x )/length(x)}"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>styler<span class="sc">::</span><span class="fu">style_text</span>(codigo_baguncado)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Could not use `colored = TRUE`, as the package prettycode is not installed.</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please install it if you want to see colored output or see</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; `?styler::print.vertical()` for more information.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; media &lt;- function(x, remover_na = TRUE) {</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   if (remover_na) {</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     x &lt;- x[!is.na(x)]</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   }</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sum(x) / length(x)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O <code>styler</code> reorganizou recuos, espaços e chaves, e trocou <code>=</code> por <code>&lt;-</code>, sem mudar o que a função faz. Para um arquivo ou para o projeto inteiro:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>styler<span class="sc">::</span><span class="fu">style_file</span>(<span class="st">"scripts/A01_preparar_dados.R"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>styler<span class="sc">::</span><span class="fu">style_dir</span>(<span class="st">"scripts"</span>)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O <code>lintr</code> faz um diagnóstico, linha por linha:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lintr<span class="sc">::</span><span class="fu">lint</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">linters =</span> lintr<span class="sc">::</span><span class="fu">linters_with_defaults</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:1: style: [object_name_linter] Variable and function name style should match snake_case or symbols.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ^~~~~~~~~~</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:12: style: [assignment_linter] Use &lt;- for assignment, not =.</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            ^</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:36: style: [commas_linter] Put a space after a comma.</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                    ^</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:41: style: [infix_spaces_linter] Put spaces around all infix operators.</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                         ^</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:43: style: [T_and_F_symbol_linter] Use TRUE instead of the symbol T.</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaGeral = mean(milho$prod_kg_ha,na.rm=T)</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                          ~^</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Repare no aviso sobre <code>T</code>: <code>T</code> e <code>F</code> são apenas objetos que valem <code>TRUE</code> e <code>FALSE</code> e podem ser sobrescritos (<code>T &lt;- 0</code>). Escreva sempre <code>TRUE</code> e <code>FALSE</code> por extenso.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>No RStudio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>Addins &gt; Style active file</em> aplica o <code>styler</code> ao arquivo aberto, e <code>Ctrl + Shift + A</code> reformata a seleção. Para o <code>lintr</code>, rode <code>lintr::lint("arquivo.R")</code> e os avisos aparecem no painel <em>Markers</em>, com links para cada linha.</p>
+</div>
+</div>
+</section><section id="funções-em-r-scripts-em-scripts" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="funções-em-r-scripts-em-scripts">
+<span class="header-section-number">9.3</span> Funções em <code>R/</code>, scripts em <code>scripts/</code>
+</h2>
+<p>Na aula 8, o pipeline de limpeza da soja ocupou mais de 20 linhas. Se ele aparecesse copiado em cada script ou capítulo que usa a soja, qualquer correção precisaria ser feita em todos os lugares. A solução é transformá-lo em uma <strong>função</strong> e guardá-la em <code>R/</code>.</p>
+<p>A divisão de responsabilidades no projeto:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Pasta</th>
+<th>Contém</th>
+<th>Roda sozinho?</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>R/</code></td>
+<td>
+<strong>definições</strong> de funções reutilizáveis</td>
+<td>não: só define funções</td>
+</tr>
+<tr class="even">
+<td><code>scripts/</code></td>
+<td>a <strong>análise</strong>, em etapas numeradas</td>
+<td>sim, do início ao fim</td>
+</tr>
+<tr class="odd">
+<td><code>data/raw/</code></td>
+<td>dados como chegaram</td>
+<td>não é código</td>
+</tr>
+<tr class="even">
+<td><code>data/processed/</code></td>
+<td>dados limpos, gerados por <code>scripts/</code>
+</td>
+<td>não é código</td>
+</tr>
+<tr class="odd">
+<td><code>output/</code></td>
+<td>tabelas e figuras, geradas por <code>scripts/</code>
+</td>
+<td>não é código</td>
+</tr>
+</tbody>
+</table>
+<p>O arquivo <code>R/funcoes_dados.R</code> deste projeto reúne as leituras e limpezas das aulas 5 a 8. Veja uma das funções:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Funções de leitura e limpeza dos dados do curso ----------------------------</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usadas pelos scripts em scripts/ e pelos capítulos a partir da aula 9.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregue com: source(here::here("R", "funcoes_dados.R"))</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' Lê o ensaio de milho 2023/24 (Excel, uma aba por local)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param arquivo Caminho da planilha.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return Um tibble com uma linha por parcela e a coluna `safra`.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ler_milho_2024 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arquivo =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"milho_met_2024.xlsx"</span>)) {</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  readxl<span class="sc">::</span><span class="fu">excel_sheets</span>(arquivo) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    rlang<span class="sc">::</span><span class="fu">set_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">map</span>(\(aba) {</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>      readxl<span class="sc">::</span><span class="fu">read_excel</span>(arquivo, <span class="at">sheet =</span> aba, <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"-"</span>, <span class="st">"perdida"</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    }) <span class="sc">|&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">list_rbind</span>(<span class="at">names_to =</span> <span class="st">"local"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">safra =</span> <span class="st">"2023/24"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">data_plantio =</span> lubridate<span class="sc">::</span><span class="fu">dmy</span>(data_plantio)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#' Lê o ensaio de milho 2024/25 (CSV em formato largo)</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param arquivo Caminho do CSV.</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param locais Tabela de locais com as colunas `local` (código) e `municipio`.</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return Um tibble longo, com os nomes de locais iguais aos de 2023/24.</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>ler_milho_2025 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arquivo =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"milho_met_2025_largo.csv"</span>),</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                           <span class="at">locais =</span> <span class="fu">ler_locais</span>()) {</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  readr<span class="sc">::</span><span class="fu">read_csv</span>(arquivo, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">cols =</span> tidyselect<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"prod_"</span>),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">names_to =</span> <span class="st">"local"</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">names_prefix =</span> <span class="st">"prod_"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">values_to =</span> <span class="st">"prod_kg_ha"</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(locais, local, municipio), <span class="at">by =</span> <span class="st">"local"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">local =</span> municipio, <span class="at">safra =</span> <span class="st">"2024/25"</span>, <span class="at">.keep =</span> <span class="st">"unused"</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">#' Lê a tabela de locais</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>ler_locais <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arquivo =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"locais.csv"</span>)) {</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  readr<span class="sc">::</span><span class="fu">read_csv</span>(arquivo, <span class="at">col_types =</span> <span class="st">"ccfddi"</span>)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co">#' Lê e limpa o ensaio de soja 2025 (CSV brasileiro, latin1)</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param arquivo Caminho do CSV.</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return Um tibble limpo, com cultivares padronizadas, acamamento lógico e datas.</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>ler_soja_2025 <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arquivo =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>)) {</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  readr<span class="sc">::</span><span class="fu">read_delim</span>(</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    arquivo,</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">locale =</span> readr<span class="sc">::</span><span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>, <span class="at">encoding =</span> <span class="st">"latin1"</span>),</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_col_types =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">cultivar =</span> cultivar <span class="sc">|&gt;</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        stringr<span class="sc">::</span><span class="fu">str_squish</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>        stringr<span class="sc">::</span><span class="fu">str_to_upper</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>        stringr<span class="sc">::</span><span class="fu">str_replace</span>(<span class="st">" "</span>, <span class="st">"-"</span>),</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">acamamento =</span> stringr<span class="sc">::</span><span class="fu">str_to_lower</span>(acamamento) <span class="sc">==</span> <span class="st">"sim"</span>,</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">data_semeadura =</span> lubridate<span class="sc">::</span><span class="fu">as_date</span>(</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>        lubridate<span class="sc">::</span><span class="fu">parse_date_time</span>(data_de_semeadura, <span class="at">orders =</span> <span class="fu">c</span>(<span class="st">"dmy"</span>, <span class="st">"ymd"</span>))</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">data_maturacao =</span> data_semeadura <span class="sc">+</span> lubridate<span class="sc">::</span><span class="fu">days</span>(dias_ate_maturacao)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>data_de_semeadura) <span class="sc">|&gt;</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">relocate</span>(data_semeadura, data_maturacao, <span class="at">.after =</span> bloco)</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Observe três escolhas:</p>
+<ul>
+<li>
+<strong>Cada função começa com um comentário</strong> dizendo o que recebe e o que devolve. O formato <code>#'</code> é o mesmo do <code>roxygen2</code>, usado para documentar pacotes (apêndice C); assim, se um dia essas funções virarem o pacote do laboratório, a documentação já estará pronta.</li>
+<li>
+<strong>Todas as funções de pacotes são chamadas com <code>::</code></strong> (<code>readr::read_csv()</code>, <code>dplyr::mutate()</code>). Uma função em <code>R/</code> não deve depender de <code>library()</code> chamado em outro lugar: ela precisa funcionar em qualquer script.</li>
+<li>
+<strong>Os caminhos padrão usam <code>here()</code></strong>, mas podem ser trocados por argumento. Isso permite testar a função com outro arquivo sem editá-la.</li>
+</ul>
+<p>Para usar as funções, um script as carrega com <code>source()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"R"</span>, <span class="st">"funcoes_dados.R"</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">ler_soja_2025</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(soja)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 120</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 9</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ local               &lt;chr&gt; "Viçosa", "Viçosa", "Viçosa", "Viçosa", "Viçosa", …</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ cultivar            &lt;chr&gt; "SJ-01", "SJ-01", "SJ-01", "SJ-01", "SJ-02", "SJ-0…</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bloco               &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1,…</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ data_semeadura      &lt;date&gt; 2024-10-16, 2024-10-16, 2024-10-17, 2024-10-15, 2…</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ data_maturacao      &lt;date&gt; 2025-02-24, 2025-02-12, 2025-02-07, 2025-02-01, 2…</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ produtividade_sc_ha &lt;dbl&gt; 56.1, 59.1, 55.5, 58.8, 65.5, 51.7, 60.6, 61.8, 57…</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ peso_100_sementes_g &lt;dbl&gt; 12.7, 15.8, 15.5, 16.2, 16.5, 16.5, 16.9, 14.7, 14…</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ dias_ate_maturacao  &lt;dbl&gt; 131, 119, 113, 109, 118, 118, 118, 118, 118, 114, …</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ acamamento          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, F…</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="projeto-integrador-do-bruto-ao-resultado" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="projeto-integrador-do-bruto-ao-resultado">
+<span class="header-section-number">9.4</span> Projeto integrador: do bruto ao resultado</h2>
+<p>O fluxo completo do Módulo 1 cabe em dois scripts.</p>
+<section id="etapa-1-preparar-os-dados" class="level3" data-number="9.4.1"><h3 data-number="9.4.1" class="anchored" data-anchor-id="etapa-1-preparar-os-dados">
+<span class="header-section-number">9.4.1</span> Etapa 1: preparar os dados</h3>
+<p><code>scripts/A01_preparar_dados.R</code> lê os quatro arquivos brutos, junta as duas safras de milho, padroniza a soja, <strong>confere</strong> se os dados estão como esperado e grava os resultados em <code>data/processed/</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepara os dados dos ensaios de milho e soja --------------------------------</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrada: data/raw/ (somente leitura)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Saída:   data/processed/milho_met.rds e data/processed/soja_ensaio.rds</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Uso: Rscript scripts/A01_preparar_dados.R</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacotes ---------------------------------------------------------------------</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"R"</span>, <span class="st">"funcoes_dados.R"</span>))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Milho: duas safras em uma tabela ---------------------------------------------</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>locais <span class="ot">&lt;-</span> <span class="fu">ler_locais</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>milho <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">ler_milho_2024</span>(), <span class="fu">ler_milho_2025</span>(<span class="at">locais =</span> locais)) <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">local =</span> <span class="fu">factor</span>(local, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(local))),</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">hibrido =</span> <span class="fu">factor</span>(hibrido),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">bloco =</span> <span class="fu">factor</span>(bloco),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">safra =</span> <span class="fu">factor</span>(safra)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(safra, <span class="at">.before =</span> local)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Soja ------------------------------------------------------------------------</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">ler_soja_2025</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(local, cultivar, bloco), factor))</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Conferências: o script para aqui se algo estiver fora do esperado -----------</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"milho: 2 safras x 4 locais x 20 híbridos x 3 blocos"</span> <span class="ot">=</span> <span class="fu">nrow</span>(milho) <span class="sc">==</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">4</span> <span class="sc">*</span> <span class="dv">20</span> <span class="sc">*</span> <span class="dv">3</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"milho: parcelas duplicadas"</span> <span class="ot">=</span> <span class="fu">anyDuplicated</span>(<span class="fu">select</span>(milho, safra, local, hibrido, bloco)) <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"milho: locais sem nome"</span> <span class="ot">=</span> <span class="sc">!</span><span class="fu">anyNA</span>(milho<span class="sc">$</span>local),</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"soja: 2 locais x 15 cultivares x 4 blocos"</span> <span class="ot">=</span> <span class="fu">nrow</span>(soja) <span class="sc">==</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">15</span> <span class="sc">*</span> <span class="dv">4</span>,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"soja: código de cultivar fora do padrão"</span> <span class="ot">=</span> <span class="fu">all</span>(<span class="fu">grepl</span>(<span class="st">"^SJ-</span><span class="sc">\\</span><span class="st">d{2}$"</span>, soja<span class="sc">$</span>cultivar)),</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"soja: data de semeadura faltante"</span> <span class="ot">=</span> <span class="sc">!</span><span class="fu">anyNA</span>(soja<span class="sc">$</span>data_semeadura)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Gravação --------------------------------------------------------------------</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>), <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_rds</span>(milho, <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>, <span class="st">"milho_met.rds"</span>))</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_rds</span>(soja, <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>, <span class="st">"soja_ensaio.rds"</span>))</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Gravados: data/processed/milho_met.rds ("</span>, <span class="fu">nrow</span>(milho), <span class="st">" linhas) e "</span>,</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="st">"data/processed/soja_ensaio.rds ("</span>, <span class="fu">nrow</span>(soja), <span class="st">" linhas)"</span>)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A parte mais importante do script é o <code>stopifnot()</code> com mensagens nomeadas. Se uma safra futura chegar com um híbrido a mais, uma parcela duplicada ou uma cultivar escrita de um jeito novo, o script <strong>para</strong> com uma mensagem clara, em vez de produzir resultados silenciosamente errados.</p>
+</section><section id="etapa-2-resumir" class="level3" data-number="9.4.2"><h3 data-number="9.4.2" class="anchored" data-anchor-id="etapa-2-resumir">
+<span class="header-section-number">9.4.2</span> Etapa 2: resumir</h3>
+<p><code>scripts/A02_resumir_ensaios.R</code> parte <strong>apenas</strong> dos dados processados e produz as tabelas de resultados em <code>output/tables/</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumos descritivos dos ensaios ---------------------------------------------</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrada: data/processed/milho_met.rds e data/processed/soja_ensaio.rds</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#          (gerados por scripts/A01_preparar_dados.R)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Saída:   output/tables/*.csv</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Uso: Rscript scripts/A02_resumir_ensaios.R</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacotes ---------------------------------------------------------------------</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>milho <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_rds</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>, <span class="st">"milho_met.rds"</span>))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_rds</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>, <span class="st">"soja_ensaio.rds"</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>pasta_saida <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"output"</span>, <span class="st">"tables"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(pasta_saida, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Milho: qualidade de cada ambiente (safra x local) ---------------------------</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ambientes_milho <span class="ot">&lt;-</span> milho <span class="sc">|&gt;</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_parcelas =</span> <span class="fu">n</span>(),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_perdidas =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(prod_kg_ha)),</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">media_kg_ha =</span> <span class="fu">mean</span>(prod_kg_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">cv_pct =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sd</span>(prod_kg_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> media_kg_ha,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(safra, local)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(safra, local)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Milho: médias dos híbridos em cada ambiente, em formato largo ----------------</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>medias_milho <span class="ot">&lt;-</span> milho <span class="sc">|&gt;</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">media_kg_ha =</span> <span class="fu">mean</span>(prod_kg_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.by =</span> <span class="fu">c</span>(hibrido, safra, local)) <span class="sc">|&gt;</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ambiente =</span> <span class="fu">paste</span>(local, safra, <span class="at">sep =</span> <span class="st">"_"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(hibrido, ambiente, media_kg_ha) <span class="sc">|&gt;</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> ambiente, <span class="at">values_from =</span> media_kg_ha)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Milho: ranking geral e consistência entre ambientes ---------------------------</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>ranking_milho <span class="ot">&lt;-</span> milho <span class="sc">|&gt;</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">media_kg_ha =</span> <span class="fu">mean</span>(prod_kg_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.by =</span> <span class="fu">c</span>(hibrido, safra, local)) <span class="sc">|&gt;</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">posicao =</span> <span class="fu">min_rank</span>(<span class="fu">desc</span>(media_kg_ha)), <span class="at">.by =</span> <span class="fu">c</span>(safra, local)) <span class="sc">|&gt;</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">media_geral_kg_ha =</span> <span class="fu">mean</span>(media_kg_ha),</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">vezes_no_top5 =</span> <span class="fu">sum</span>(posicao <span class="sc">&lt;=</span> <span class="dv">5</span>),</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">pior_posicao =</span> <span class="fu">max</span>(posicao),</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> hibrido</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(media_geral_kg_ha))</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Soja: médias por cultivar e local -------------------------------------------</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>medias_soja <span class="ot">&lt;-</span> soja <span class="sc">|&gt;</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">produtividade_sc_ha =</span> <span class="fu">mean</span>(produtividade_sc_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">peso_100_sementes_g =</span> <span class="fu">mean</span>(peso_100_sementes_g, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">dias_ate_maturacao =</span> <span class="fu">mean</span>(dias_ate_maturacao),</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_acamamento =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(acamamento),</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(local, cultivar)</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(local, <span class="fu">desc</span>(produtividade_sc_ha))</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Gravação --------------------------------------------------------------------</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(ambientes_milho, <span class="fu">file.path</span>(pasta_saida, <span class="st">"milho_ambientes.csv"</span>))</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(medias_milho, <span class="fu">file.path</span>(pasta_saida, <span class="st">"milho_medias_hibrido_ambiente.csv"</span>))</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(ranking_milho, <span class="fu">file.path</span>(pasta_saida, <span class="st">"milho_ranking.csv"</span>))</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(medias_soja, <span class="fu">file.path</span>(pasta_saida, <span class="st">"soja_medias_cultivar_local.csv"</span>))</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Tabelas gravadas em output/tables/"</span>)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="rodando-o-fluxo" class="level3" data-number="9.4.3"><h3 data-number="9.4.3" class="anchored" data-anchor-id="rodando-o-fluxo">
+<span class="header-section-number">9.4.3</span> Rodando o fluxo</h3>
+<p>Em uma sessão limpa, rodar os dois scripts em ordem recria tudo a partir dos dados brutos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"scripts"</span>, <span class="st">"A01_preparar_dados.R"</span>), <span class="at">local =</span> <span class="fu">new.env</span>())</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gravados: data/processed/milho_met.rds (480 linhas) e data/processed/soja_ensaio.rds (120 linhas)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"scripts"</span>, <span class="st">"A02_resumir_ensaios.R"</span>), <span class="at">local =</span> <span class="fu">new.env</span>())</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Tabelas gravadas em output/tables/</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p><code>local = new.env()</code> roda cada script em um ambiente separado, para que objetos de um não “vazem” para o outro: o script 2 só funciona se tudo o que ele precisa estiver nos arquivos gravados pelo script 1. No terminal, o equivalente é:</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> scripts/A01_preparar_dados.R</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> scripts/A02_resumir_ensaios.R</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>E os resultados:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"output"</span>, <span class="st">"tables"</span>, <span class="st">"milho_ambientes.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 6</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   safra   local       n_parcelas n_perdidas media_kg_ha cv_pct</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2023/24 Londrina            60          5       9194.  11.7 </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2023/24 Rio Verde           60          0      10295.  10.1 </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2023/24 Sete Lagoas         60          2       9532.   9.33</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2023/24 Viçosa              60          0       8816.   9.74</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2024/25 Londrina            60          0       8589.  10.9 </span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2024/25 Rio Verde           60          0       9981.   9.06</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7 2024/25 Sete Lagoas         60          0       9119.   9.98</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 2024/25 Viçosa              60          0       8366.  12.2</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"output"</span>, <span class="st">"tables"</span>, <span class="st">"milho_ranking.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">8</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 4</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   hibrido media_geral_kg_ha vezes_no_top5 pior_posicao</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;               &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 HB16               10487.             8            5</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 HB17               10021.             6            6</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 HB18                9903.             4           14</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 HB20                9810.             3            8</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 HB01                9713.             3           13</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 HB03                9585.             3           14</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7 HB10                9574.             3           14</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 HB09                9520.             3           14</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"output"</span>, <span class="st">"tables"</span>, <span class="st">"soja_medias_cultivar_local.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">5</span>)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 6</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   local     cultivar produtividade_sc_ha peso_100_sementes_g dias_ate_maturacao</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;                  &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Rio Verde SJ-08                   74.8                17.1               120.</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Rio Verde SJ-10                   74.6                17.0               116 </span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Rio Verde SJ-02                   70.1                16.6               116.</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Rio Verde SJ-13                   69.5                17.5               120.</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Rio Verde SJ-14                   68.4                16                 120.</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 1 more variable: pct_acamamento &lt;dbl&gt;</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A tabela de ambientes mostra, para cada safra e local, o número de parcelas, as perdas, a média e o coeficiente de variação, os primeiros números que um melhorista olha para avaliar a qualidade de um ensaio. O ranking indica quais híbridos se mantiveram entre os cinco melhores nos oito ambientes.</p>
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>O que vai para o Git
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>data/processed/</code> e <code>output/</code> são <strong>produtos</strong> do código: podem ser apagados e recriados a qualquer momento. Por isso, no <code>.gitignore</code> deste projeto, eles estão excluídos do versionamento (exceto um arquivo <code>.gitkeep</code> que mantém as pastas). O que vai para o Git é o que não pode ser recriado: dados brutos, código, texto e o <code>renv.lock</code>.</p>
+</div>
+</div>
+</section></section><section id="git-e-github-a-partir-do-r" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="git-e-github-a-partir-do-r">
+<span class="header-section-number">9.5</span> Git e GitHub a partir do R</h2>
+<p>O <strong>Git</strong> registra o histórico de cada arquivo do projeto: quem mudou, o quê, quando e por quê. O <strong>GitHub</strong> guarda uma cópia desse histórico na nuvem e permite colaborar, revisar código e publicar materiais (como este livro).</p>
+<section id="configuração-inicial-uma-vez-por-computador" class="level3" data-number="9.5.1"><h3 data-number="9.5.1" class="anchored" data-anchor-id="configuração-inicial-uma-vez-por-computador">
+<span class="header-section-number">9.5.1</span> Configuração inicial (uma vez por computador)</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Seu nome e e-mail aparecerão em cada registro (commit)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git_config</span>(<span class="at">user.name =</span> <span class="st">"Seu Nome"</span>, <span class="at">user.email =</span> <span class="st">"seu.email@ufv.br"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Token de acesso ao GitHub: cria no navegador e guarda com segurança</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_github_token</span>()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Diagnóstico: confere se está tudo configurado</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">git_sitrep</span>()</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O token substitui a senha nas comunicações com o GitHub. Guarde-o pelo <code>gitcreds_set()</code>, que usa o cofre de senhas do sistema operacional, e <strong>nunca</strong> o escreva em um script.</p>
+</section><section id="versionando-um-projeto" class="level3" data-number="9.5.2"><h3 data-number="9.5.2" class="anchored" data-anchor-id="versionando-um-projeto">
+<span class="header-section-number">9.5.2</span> Versionando um projeto</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_git</span>()      <span class="co"># inicia o repositório e faz o primeiro commit</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_github</span>(<span class="at">private =</span> <span class="cn">TRUE</span>)   <span class="co"># cria o repositório no GitHub e envia o código</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Depois disso, o dia a dia acontece no painel <strong>Git</strong> do RStudio:</p>
+<ol type="1">
+<li>
+<strong>Stage</strong>: marque os arquivos alterados que entram no registro.</li>
+<li>
+<strong>Commit</strong>: escreva uma mensagem curta que diga <strong>o que mudou e por quê</strong> (“Corrige leitura das datas de semeadura da soja”).</li>
+<li>
+<strong>Push</strong>: envie os commits para o GitHub.</li>
+<li>
+<strong>Pull</strong>: traga as mudanças feitas por colegas antes de começar a trabalhar.</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Commits pequenos e frequentes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Um commit por mudança lógica (“adiciona leitura da safra 2025”, “corrige cultivares em minúsculas”) é muito mais útil do que um commit gigante no fim do dia. Se algo quebrar, você saberá exatamente qual mudança causou o problema e poderá desfazê-la com facilidade.</p>
+</div>
+</div>
+<p>O apêndice D detalha o fluxo de colaboração do laboratório com <em>branches</em> e <em>pull requests</em>.</p>
+</section></section><section id="um-relatório-quarto-que-lê-os-resultados" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="um-relatório-quarto-que-lê-os-resultados">
+<span class="header-section-number">9.6</span> Um relatório Quarto que lê os resultados</h2>
+<p>O último elo do fluxo é comunicar os resultados. Um relatório Quarto em <code>reports/</code> <strong>lê</strong> as tabelas de <code>output/</code> (ou os dados de <code>data/processed/</code>) e nunca refaz a limpeza: se os dados mudarem, basta rodar os scripts e renderizar o relatório de novo.</p>
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode" id="cb14"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Ensaios de milho e soja: resumo descritivo"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "QGSL Lab"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: false</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>ambientes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"output"</span>, <span class="st">"tables"</span>, <span class="st">"milho_ambientes.csv"</span>))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Qualidade dos ambientes</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>O ensaio de milho teve <span class="in">`{r} sum(ambientes$n_perdidas)`</span> parcelas perdidas</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>em <span class="in">`{r} nrow(ambientes)`</span> ambientes.</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(ambientes, <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+<p>O código entre <code>`{r} ...`</code> dentro do texto é avaliado e substituído pelo valor: os números do relatório nunca ficam desatualizados em relação aos dados. Para renderizar:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>quarto<span class="sc">::</span><span class="fu">quarto_render</span>(<span class="st">"reports/resumo_ensaios.qmd"</span>)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Na aula 17 veremos relatórios <strong>parametrizados</strong>, que geram automaticamente um relatório por ensaio ou por local.</p>
+</section><section id="checklist-do-zen-do-r" class="level2" data-number="9.7"><h2 data-number="9.7" class="anchored" data-anchor-id="checklist-do-zen-do-r">
+<span class="header-section-number">9.7</span> Checklist do Zen do R</h2>
+<p>Antes de considerar uma análise pronta para ser compartilhada, confira:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>Pergunta</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>☐</td>
+<td>O projeto abre pelo <code>.Rproj</code> e não há <code>setwd()</code> em nenhum lugar?</td>
+</tr>
+<tr class="even">
+<td>☐</td>
+<td>
+<code>data/raw/</code> está intacta e todas as correções estão no código?</td>
+</tr>
+<tr class="odd">
+<td>☐</td>
+<td>Reiniciando a sessão e rodando os scripts em ordem, tudo é recriado sem erros?</td>
+</tr>
+<tr class="even">
+<td>☐</td>
+<td>Os scripts conferem os dados (<code>stopifnot()</code>) antes de gravar resultados?</td>
+</tr>
+<tr class="odd">
+<td>☐</td>
+<td>Funções reutilizáveis estão em <code>R/</code> e chamam pacotes com <code>::</code>?</td>
+</tr>
+<tr class="even">
+<td>☐</td>
+<td>O código passa pelo <code>styler</code> e o <code>lintr</code> não aponta problemas relevantes?</td>
+</tr>
+<tr class="odd">
+<td>☐</td>
+<td>O <code>renv.lock</code> está atualizado (<code>renv::status()</code>)?</td>
+</tr>
+<tr class="even">
+<td>☐</td>
+<td>Tudo o que não pode ser recriado está no Git, e nada que contenha senhas ou tokens?</td>
+</tr>
+</tbody>
+</table></section><section id="por-baixo-do-capô" class="level2" data-number="9.8"><h2 data-number="9.8" class="anchored" data-anchor-id="por-baixo-do-capô">
+<span class="header-section-number">9.8</span> Por baixo do capô</h2>
+<section id="o-que-source-faz" class="level3" data-number="9.8.1"><h3 data-number="9.8.1" class="anchored" data-anchor-id="o-que-source-faz">
+<span class="header-section-number">9.8.1</span> O que <code>source()</code> faz</h3>
+<p><code>source("arquivo.R")</code> lê o arquivo e executa cada expressão, como se você as digitasse no console. Sem o argumento <code>local</code>, os objetos criados vão para o ambiente global, misturando-se aos seus. Com <code>local = new.env()</code>, vão para um ambiente novo e descartável:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ambiente <span class="ot">&lt;-</span> <span class="fu">new.env</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"R"</span>, <span class="st">"funcoes_dados.R"</span>), <span class="at">local =</span> ambiente)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>(ambiente)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "ler_locais"     "ler_milho_2024" "ler_milho_2025" "ler_soja_2025"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">exists</span>(<span class="st">"ler_milho_2024"</span>, <span class="at">envir =</span> ambiente)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="o-que-é-um-commit" class="level3" data-number="9.8.2"><h3 data-number="9.8.2" class="anchored" data-anchor-id="o-que-é-um-commit">
+<span class="header-section-number">9.8.2</span> O que é um commit</h3>
+<p>Cada commit é uma fotografia completa do projeto, identificada por um código único (o <em>hash</em>) e ligada ao commit anterior. O histórico forma uma cadeia que pode ser percorrida para trás:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>gert<span class="sc">::</span><span class="fu">git_log</span>(<span class="at">max =</span> <span class="dv">5</span>)   <span class="co"># os últimos cinco commits deste projeto</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Como cada commit guarda o estado completo, é sempre possível ver ou recuperar qualquer versão anterior de qualquer arquivo. Por isso Git dispensa nomes como <code>analise_final_v3_corrigida.R</code>.</p>
+</section></section><section id="exercícios" class="level2" data-number="9.9"><h2 data-number="9.9" class="anchored" data-anchor-id="exercícios">
+<span class="header-section-number">9.9</span> Exercícios</h2>
+<ol type="1">
+<li>
+<strong>Estilo.</strong> Passe o código abaixo pelo <code>styler</code> e depois pelo <code>lintr</code>. Quais problemas o <code>lintr</code> ainda aponta depois da formatação, e por que o <code>styler</code> não os resolveu?</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>MediaPorLocal<span class="ot">=</span>milho<span class="sc">|&gt;</span><span class="fu">summarise</span>(<span class="at">m=</span><span class="fu">mean</span>(prod_kg_ha,<span class="at">na.rm=</span>T),<span class="at">.by=</span>local)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>codigo <span class="ot">&lt;-</span> <span class="st">"MediaPorLocal=milho|&gt;summarise(m=mean(prod_kg_ha,na.rm=T),.by=local)"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>formatado <span class="ot">&lt;-</span> styler<span class="sc">::</span><span class="fu">style_text</span>(codigo)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>formatado</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Could not use `colored = TRUE`, as the package prettycode is not installed.</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Please install it if you want to see colored output or see</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; `?styler::print.vertical()` for more information.</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaPorLocal &lt;- milho |&gt; summarise(m = mean(prod_kg_ha, na.rm = T), .by = local)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>lintr<span class="sc">::</span><span class="fu">lint</span>(<span class="at">text =</span> <span class="fu">paste0</span>(<span class="fu">paste</span>(formatado, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:1: style: [object_name_linter] Variable and function name style should match snake_case or symbols.</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaPorLocal &lt;- milho |&gt; summarise(m = mean(prod_kg_ha, na.rm = T), .by = local)</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ^~~~~~~~~~~~~</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:67: style: [T_and_F_symbol_linter] Use TRUE instead of the symbol T.</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaPorLocal &lt;- milho |&gt; summarise(m = mean(prod_kg_ha, na.rm = T), .by = local)</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                                  ~^</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;text&gt;:1:81: style: [line_length_linter] Lines should not be more than 80 characters. This line is 81 characters.</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MediaPorLocal &lt;- milho |&gt; summarise(m = mean(prod_kg_ha, na.rm = T), .by = local)</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O <code>styler</code> corrige espaços e troca <code>=</code> por <code>&lt;-</code>, mas não muda <strong>nomes</strong> nem <strong>valores</strong>: renomear <code>MediaPorLocal</code> para <code>media_por_local</code> e trocar <code>T</code> por <code>TRUE</code> mudaria o código, e essa decisão fica com você.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>
+<strong>Uma nova função.</strong> Escreva em <code>R/funcoes_dados.R</code> uma função <code>resumir_ambientes(dados, variavel)</code> que receba uma tabela de ensaio e devolva, por safra e local, a média e o CV da variável indicada. (Dica: para usar o nome de uma coluna recebido como argumento dentro do <code>dplyr</code>, envolva-o em chaves duplas: <code>mean({{ variavel }}, na.rm = TRUE)</code>. Veremos o porquê na aula 16.)</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>resumir_ambientes <span class="ot">&lt;-</span> <span class="cf">function</span>(dados, variavel) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  dados <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">media =</span> <span class="fu">mean</span>({{ variavel }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">cv_pct =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sd</span>({{ variavel }}, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> media,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">.by =</span> <span class="fu">c</span>(safra, local)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>milho <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"processed"</span>, <span class="st">"milho_met.rds"</span>))</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">resumir_ambientes</span>(milho, prod_kg_ha)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 4</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   safra   local        media cv_pct</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;fct&gt;   &lt;fct&gt;        &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2023/24 Londrina     9194.  11.7 </span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2023/24 Rio Verde   10295.  10.1 </span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2023/24 Sete Lagoas  9532.   9.33</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2023/24 Viçosa       8816.   9.74</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2024/25 Viçosa       8366.  12.2 </span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2024/25 Sete Lagoas  9119.   9.98</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7 2024/25 Rio Verde    9981.   9.06</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8 2024/25 Londrina     8589.  10.9</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="fu">resumir_ambientes</span>(<span class="fu">filter</span>(milho, safra <span class="sc">==</span> <span class="st">"2023/24"</span>), altura_cm)</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   safra   local       media cv_pct</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;fct&gt;   &lt;fct&gt;       &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 2023/24 Londrina     221.   6.28</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2023/24 Rio Verde    217.   5.75</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 2023/24 Sete Lagoas  222.   5.43</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2023/24 Viçosa       222.   5.75</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>
+<strong>Quebrando o fluxo de propósito.</strong> Simule um erro de digitação sem tocar no arquivo bruto (que é somente leitura): leia a soja com <code>ler_soja_2025()</code>, troque um valor de <code>cultivar</code> por <code>"SJ-1"</code> e rode a conferência do script 1 sobre esse objeto. O que acontece?</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>soja_teste <span class="ot">&lt;-</span> <span class="fu">ler_soja_2025</span>() <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cultivar =</span> <span class="fu">replace</span>(cultivar, <span class="dv">1</span>, <span class="st">"SJ-1"</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"soja: código de cultivar fora do padrão"</span> <span class="ot">=</span> <span class="fu">all</span>(<span class="fu">grepl</span>(<span class="st">"^SJ-</span><span class="sc">\\</span><span class="st">d{2}$"</span>, soja_teste<span class="sc">$</span>cultivar))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! soja: código de cultivar fora do padrão</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O script para com a mensagem que escrevemos. Em uma análise real, isso aconteceria antes de qualquer tabela ser gravada.</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>
+<strong>Seu projeto.</strong> Crie (ou organize) o projeto da sua própria pesquisa com a estrutura do laboratório, inicie o Git, faça o primeiro commit e, se quiser, publique-o como repositório privado no GitHub. Use o checklist do Zen do R para conferir.</li>
+</ol></section><section id="resumo" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="resumo">Resumo</h2>
+<ul>
+<li>O Zen do R reúne os hábitos do módulo: projeto, <code>here()</code>, dados brutos intocados, código como fonte da verdade, versões registradas, estilo consistente e Git.</li>
+<li>
+<code>styler</code> corrige a formatação; <code>lintr</code> aponta o que exige decisão.</li>
+<li>Funções reutilizáveis vão em <code>R/</code> (com <code>::</code> e documentação); a análise vai em <code>scripts/</code> numerados, que conferem os dados com <code>stopifnot()</code> antes de gravar.</li>
+<li>
+<code>data/processed/</code> e <code>output/</code> são recriáveis e ficam fora do Git; dados brutos, código e <code>renv.lock</code> ficam dentro.</li>
+<li>Relatórios Quarto leem os resultados prontos e usam código em linha para que os números nunca fiquem desatualizados.</li>
+</ul></section><section id="para-saber-mais" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="para-saber-mais">Para saber mais</h2>
+<ul>
+<li>
+<em>O Zen do R</em>, todos os capítulos <span class="citation" data-cites="cursor_zen">(<a href="../references.html#ref-cursor_zen" role="doc-biblioref">Trecenti e Lente 2021</a>)</span>.</li>
+<li>
+<em>R for Data Science</em>, capítulos “Workflow: code style”, “Workflow: scripts and projects” e “Quarto” <span class="citation" data-cites="wickham2023r4ds">(<a href="../references.html#ref-wickham2023r4ds" role="doc-biblioref">Wickham et al. 2023</a>)</span>.</li>
+<li>
+<em>R Packages</em>, capítulos sobre funções e documentação com <code>roxygen2</code>, para quando as funções em <code>R/</code> crescerem <span class="citation" data-cites="wickham2023rpkgs">(<a href="../references.html#ref-wickham2023rpkgs" role="doc-biblioref">Wickham e Bryan 2023</a>)</span>.</li>
+<li>Jenny Bryan, <em>Happy Git and GitHub for the useR</em>: <a href="https://happygitwithr.com" class="uri">https://happygitwithr.com</a>.</li>
+</ul>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-cursor_zen" class="csl-entry" role="listitem">
+Trecenti, Julio, e Caio Lente. 2021. <em>O Zen do R</em>. Curso-R. <a href="https://curso-r.github.io/zen-do-r/">https://curso-r.github.io/zen-do-r/</a>.
+</div>
+<div id="ref-wickham2023rpkgs" class="csl-entry" role="listitem">
+Wickham, Hadley, e Jennifer Bryan. 2023. <em>R Packages</em>. 2.ª ed. O’Reilly Media. <a href="https://r-pkgs.org/">https://r-pkgs.org/</a>.
+</div>
+<div id="ref-wickham2023r4ds" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, e Garrett Grolemund. 2023. <em>R for Data Science</em>. 2.ª ed. O’Reilly Media. <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../chapters/08-limpeza.html" class="pagination-link" aria-label="Limpeza de tipos especiais">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>  <span class="chapter-title">Limpeza de tipos especiais</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../references.html" class="pagination-link" aria-label="Referências">
+        <span class="nav-page-text">Referências</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body>
+</html>

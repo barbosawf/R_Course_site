@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt">
+<head>
+<link rel="alternate" hreflang="pt" href="/chapters/05-importacao.html" />
+<link rel="alternate" hreflang="en" href="/en/chapters/05-importacao.en.html" />
+<meta charset="UTF-8">
+<meta name="generator" content="quarto-1.10.18">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>5  Importação de dados – Curso de R do QGSL Lab</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><meta name="quarto:offset" content="../">
+<link href="../chapters/06-dplyr.html" rel="next">
+<link href="../chapters/04-pacotes.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script><script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-5a1953863e1f72ef3b996ef827f01ca7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-2531e20ceebe0233fa76cf5b365e7f3b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-a2361f04095cacf744a4d6ec15163895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script><link rel="stylesheet" href="../assets/qgsl.css">
+</head>
+<body class="nav-sidebar floating quarto-light">
+<script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script><div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.html">Módulo 1 — Fundamentos, dados e o Zen do R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/05-importacao.html"><span class="chapter-number">5</span>  <span class="chapter-title">Importação de dados</span></a></li>
+</ol></nav><a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Curso de R do QGSL Lab</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo escuro"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="dropdown" id="languages-links-parent">
+<button class="btn btn-primary dropdown-toggle babelquarto-languages-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="languages-button"><i class="bi bi-globe2"></i> Português (BR)</button><ul class="dropdown-menu" id="languages-links"><li><a class="dropdown-item" href="../en/chapters/05-importacao.en.html" id="language-link-en">English</a></li></ul>
+</div>
+<div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefácio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Módulo 1 — Fundamentos, dados e o Zen do R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-projetos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>  <span class="chapter-title">Projetos: a unidade de trabalho no R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-linguagem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>  <span class="chapter-title">R como linguagem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-estruturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>  <span class="chapter-title">Estruturas de dados</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-pacotes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>  <span class="chapter-title">Pacotes e o ecossistema</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-importacao.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>  <span class="chapter-title">Importação de dados</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-dplyr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>  <span class="chapter-title">Transformação com dplyr I</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-tidy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>  <span class="chapter-title">Dados <em>tidy</em></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-limpeza.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>  <span class="chapter-title">Limpeza de tipos especiais</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-zen.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>  <span class="chapter-title">Zen do R na prática e projeto integrador</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referências</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Índice</h2>
+   
+  <ul>
+<li><a href="#objetivos-da-aula" id="toc-objetivos-da-aula" class="nav-link active" data-scroll-target="#objetivos-da-aula">Objetivos da aula</a></li>
+  <li><a href="#os-dados-desta-aula" id="toc-os-dados-desta-aula" class="nav-link" data-scroll-target="#os-dados-desta-aula"><span class="header-section-number">5.1</span> Os dados desta aula</a></li>
+  <li>
+<a href="#readr-lendo-arquivos-de-texto" id="toc-readr-lendo-arquivos-de-texto" class="nav-link" data-scroll-target="#readr-lendo-arquivos-de-texto"><span class="header-section-number">5.2</span> <code>readr</code>: lendo arquivos de texto</a>
+  <ul class="collapse">
+<li><a href="#especificando-os-tipos" id="toc-especificando-os-tipos" class="nav-link" data-scroll-target="#especificando-os-tipos"><span class="header-section-number">5.2.1</span> Especificando os tipos</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#o-csv-%C3%A0-brasileira" id="toc-o-csv-à-brasileira" class="nav-link" data-scroll-target="#o-csv-à-brasileira"><span class="header-section-number">5.3</span> O CSV “à brasileira”</a>
+  <ul class="collapse">
+<li><a href="#primeiro-passo-o-separador-e-o-decimal" id="toc-primeiro-passo-o-separador-e-o-decimal" class="nav-link" data-scroll-target="#primeiro-passo-o-separador-e-o-decimal"><span class="header-section-number">5.3.1</span> Primeiro passo: o separador e o decimal</a></li>
+  <li><a href="#segundo-passo-a-codifica%C3%A7%C3%A3o" id="toc-segundo-passo-a-codificação" class="nav-link" data-scroll-target="#segundo-passo-a-codificação"><span class="header-section-number">5.3.2</span> Segundo passo: a codificação</a></li>
+  <li><a href="#quando-a-leitura-falha-problems" id="toc-quando-a-leitura-falha-problems" class="nav-link" data-scroll-target="#quando-a-leitura-falha-problems"><span class="header-section-number">5.3.3</span> Quando a leitura falha: <code>problems()</code></a></li>
+  <li><a href="#valores-faltantes-codificados" id="toc-valores-faltantes-codificados" class="nav-link" data-scroll-target="#valores-faltantes-codificados"><span class="header-section-number">5.3.4</span> Valores faltantes codificados</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#readxl-planilhas-excel" id="toc-readxl-planilhas-excel" class="nav-link" data-scroll-target="#readxl-planilhas-excel"><span class="header-section-number">5.4</span> <code>readxl</code>: planilhas Excel</a>
+  <ul class="collapse">
+<li><a href="#outras-op%C3%A7%C3%B5es-%C3%BAteis" id="toc-outras-opções-úteis" class="nav-link" data-scroll-target="#outras-opções-úteis"><span class="header-section-number">5.4.1</span> Outras opções úteis</a></li>
+  <li><a href="#lendo-todas-as-abas-de-uma-vez" id="toc-lendo-todas-as-abas-de-uma-vez" class="nav-link" data-scroll-target="#lendo-todas-as-abas-de-uma-vez"><span class="header-section-number">5.4.2</span> Lendo todas as abas de uma vez</a></li>
+  </ul>
+</li>
+  <li><a href="#janitor-nomes-de-colunas-limpos" id="toc-janitor-nomes-de-colunas-limpos" class="nav-link" data-scroll-target="#janitor-nomes-de-colunas-limpos"><span class="header-section-number">5.5</span> <code>janitor</code>: nomes de colunas limpos</a></li>
+  <li>
+<a href="#outros-formatos" id="toc-outros-formatos" class="nav-link" data-scroll-target="#outros-formatos"><span class="header-section-number">5.6</span> Outros formatos</a>
+  <ul class="collapse">
+<li><a href="#spss-stata-e-sas-haven" id="toc-spss-stata-e-sas-haven" class="nav-link" data-scroll-target="#spss-stata-e-sas-haven"><span class="header-section-number">5.6.1</span> SPSS, Stata e SAS: <code>haven</code></a></li>
+  </ul>
+</li>
+  <li><a href="#salvando-resultados" id="toc-salvando-resultados" class="nav-link" data-scroll-target="#salvando-resultados"><span class="header-section-number">5.7</span> Salvando resultados</a></li>
+  <li><a href="#um-roteiro-de-confer%C3%AAncia-ap%C3%B3s-cada-importa%C3%A7%C3%A3o" id="toc-um-roteiro-de-conferência-após-cada-importação" class="nav-link" data-scroll-target="#um-roteiro-de-conferência-após-cada-importação"><span class="header-section-number">5.8</span> Um roteiro de conferência após cada importação</a></li>
+  <li>
+<a href="#por-baixo-do-cap%C3%B4" id="toc-por-baixo-do-capô" class="nav-link" data-scroll-target="#por-baixo-do-capô"><span class="header-section-number">5.9</span> Por baixo do capô</a>
+  <ul class="collapse">
+<li><a href="#como-o-readr-adivinha-os-tipos" id="toc-como-o-readr-adivinha-os-tipos" class="nav-link" data-scroll-target="#como-o-readr-adivinha-os-tipos"><span class="header-section-number">5.9.1</span> Como o <code>readr</code> adivinha os tipos</a></li>
+  <li><a href="#read.csv-faz-escolhas-diferentes" id="toc-read.csv-faz-escolhas-diferentes" class="nav-link" data-scroll-target="#read.csv-faz-escolhas-diferentes"><span class="header-section-number">5.9.2</span> <code>read.csv()</code> faz escolhas diferentes</a></li>
+  </ul>
+</li>
+  <li><a href="#exerc%C3%ADcios" id="toc-exercícios" class="nav-link" data-scroll-target="#exercícios"><span class="header-section-number">5.10</span> Exercícios</a></li>
+  <li><a href="#resumo" id="toc-resumo" class="nav-link" data-scroll-target="#resumo">Resumo</a></li>
+  <li><a href="#para-saber-mais" id="toc-para-saber-mais" class="nav-link" data-scroll-target="#para-saber-mais">Para saber mais</a></li>
+  </ul></nav>
+</div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="../chapters/01-projetos.html">Módulo 1 — Fundamentos, dados e o Zen do R</a></li>
+<li class="breadcrumb-item"><a href="../chapters/05-importacao.html"><span class="chapter-number">5</span>  <span class="chapter-title">Importação de dados</span></a></li>
+</ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-importacao" class="quarto-section-identifier"><span class="chapter-number">5</span>  <span class="chapter-title">Importação de dados</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="objetivos-da-aula" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="objetivos-da-aula">Objetivos da aula</h2>
+<p>Ao final desta aula você será capaz de:</p>
+<ol type="1">
+<li>Ler arquivos CSV, inclusive no padrão brasileiro (<code>;</code> como separador, vírgula decimal, acentos em latin1).</li>
+<li>Ler planilhas Excel com várias abas, linhas de anotação e células “sujas”.</li>
+<li>Controlar o tipo de cada coluna e diagnosticar falhas de leitura com <code>problems()</code>.</li>
+<li>Padronizar nomes de colunas com <code>janitor::clean_names()</code>.</li>
+<li>Ler arquivos de outros programas estatísticos e salvar resultados em formatos adequados.</li>
+</ol>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Roteiro da aula ao vivo (60 min)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Tempo</th>
+<th>Atividade</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>0–5</td>
+<td>Retomada: pacotes, tidyverse e pipe</td>
+</tr>
+<tr class="even">
+<td>5–15</td>
+<td>
+<code>readr</code>: um CSV limpo e a especificação de colunas</td>
+</tr>
+<tr class="odd">
+<td>15–30</td>
+<td>O CSV “à brasileira”: separador, decimal, codificação e <code>problems()</code>
+</td>
+</tr>
+<tr class="even">
+<td>30–45</td>
+<td>
+<code>readxl</code>: a planilha de campo do ensaio de milho</td>
+</tr>
+<tr class="odd">
+<td>45–50</td>
+<td><code>janitor::clean_names()</code></td>
+</tr>
+<tr class="even">
+<td>50–55</td>
+<td>Salvando: CSV, RDS e Excel</td>
+</tr>
+<tr class="odd">
+<td>55–60</td>
+<td>Exercício 1 e fechamento</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="os-dados-desta-aula" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="os-dados-desta-aula">
+<span class="header-section-number">5.1</span> Os dados desta aula</h2>
+<p>A partir de agora trabalharemos com os arquivos de <code>data/raw/</code>, gerados pelo script <code>scripts/simular_dados_modulo1.R</code>. Eles imitam o que chega de verdade ao laboratório:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Arquivo</th>
+<th>O que é</th>
+<th>Desafio</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>locais.csv</code></td>
+<td>metadados dos locais de ensaio</td>
+<td>nenhum: é o arquivo “bem-comportado”</td>
+</tr>
+<tr class="even">
+<td><code>soja_ensaio_2025.csv</code></td>
+<td>ensaio de cultivares de soja</td>
+<td>
+<code>;</code> como separador, vírgula decimal, acentos em latin1</td>
+</tr>
+<tr class="odd">
+<td><code>milho_met_2024.xlsx</code></td>
+<td>ensaio multiambiente de milho, uma aba por local</td>
+<td>linhas de anotação, nomes com acentos, parcelas perdidas codificadas como texto</td>
+</tr>
+<tr class="even">
+<td><code>milho_met_2025_largo.csv</code></td>
+<td>o mesmo ensaio na safra seguinte</td>
+<td>formato largo (será tratado na aula 7)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Lembrete: <code>data/raw/</code> é somente leitura
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nenhum arquivo desta pasta será editado, nem no Excel. Toda correção será feita por código, e o resultado limpo irá para <code>data/processed/</code> na aula 9.</p>
+</div>
+</div>
+</section><section id="readr-lendo-arquivos-de-texto" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="readr-lendo-arquivos-de-texto">
+<span class="header-section-number">5.2</span> <code>readr</code>: lendo arquivos de texto</h2>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Intenção do pacote: <code>readr</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problema que resolve.</strong> As funções de leitura do R base (<code>read.csv()</code>, <code>read.table()</code>) são lentas em arquivos grandes, adivinham tipos de forma pouco transparente, alteram nomes de colunas sem avisar e, em versões antigas do R, transformavam todo texto em fator.</p>
+<p><strong>Filosofia.</strong> O <code>readr</code> lê o arquivo, <strong>mostra o que adivinhou</strong> sobre cada coluna e devolve um <code>tibble</code>. Se algum valor não se encaixa no tipo esperado, ele não para nem esconde: marca como <code>NA</code> e registra o ocorrido em <code>problems()</code>. A configuração regional (separador decimal, codificação, formato de datas) é concentrada em um único objeto, o <code>locale()</code>.</p>
+<p><strong>Por que ele e não as alternativas.</strong> <code>read.csv()</code> funciona e você o verá muito por aí, mas exige mais cuidado com tipos e nomes. <code>data.table::fread()</code> é ainda mais rápido e será visto na aula 18, junto com <code>arrow</code> para arquivos grandes. Para o dia a dia de ensaios, o <code>readr</code> dá o melhor equilíbrio entre velocidade, transparência e integração com o resto do tidyverse.</p>
+</div>
+</div>
+<p>Comecemos pelo arquivo mais simples:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>locais <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"locais.csv"</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 4 Columns: 6</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: ","</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (3): local, municipio, uf</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (3): latitude, longitude, altitude_m</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>locais</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 6</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   local       municipio   uf    latitude longitude altitude_m</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 vicosa      Viçosa      MG       -20.8     -42.9        650</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 sete_lagoas Sete Lagoas MG       -19.5     -44.2        730</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 rio_verde   Rio Verde   GO       -17.8     -50.9        750</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 londrina    Londrina    PR       -23.3     -51.2        585</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A mensagem <code>Column specification</code> mostra o que o <code>readr</code> concluiu: <code>local</code>, <code>municipio</code> e <code>uf</code> são texto (<code>chr</code>); <code>latitude</code>, <code>longitude</code> e <code>altitude_m</code> são números (<code>dbl</code>). Essa conclusão vem da leitura das primeiras 1000 linhas.</p>
+<section id="especificando-os-tipos" class="level3" data-number="5.2.1"><h3 data-number="5.2.1" class="anchored" data-anchor-id="especificando-os-tipos">
+<span class="header-section-number">5.2.1</span> Especificando os tipos</h3>
+<p>Em scripts de produção, é melhor <strong>dizer</strong> os tipos do que deixá-los ser adivinhados. Assim, se o arquivo mudar, você descobre na leitura e não três etapas depois:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>locais <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"locais.csv"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">local =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">municipio =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">uf =</span> <span class="fu">col_factor</span>(),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">altitude_m =</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> <span class="fu">col_double</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>locais</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 6</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   local       municipio   uf    latitude longitude altitude_m</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;fct&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;int&gt;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 vicosa      Viçosa      MG       -20.8     -42.9        650</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 sete_lagoas Sete Lagoas MG       -19.5     -44.2        730</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 rio_verde   Rio Verde   GO       -17.8     -50.9        750</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 londrina    Londrina    PR       -23.3     -51.2        585</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>As funções <code>col_*()</code> mais usadas:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Função</th>
+<th>Tipo</th>
+<th>Abreviação em <code>col_types = "..."</code>
+</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>col_character()</code></td>
+<td>texto</td>
+<td><code>c</code></td>
+</tr>
+<tr class="even">
+<td><code>col_double()</code></td>
+<td>decimal</td>
+<td><code>d</code></td>
+</tr>
+<tr class="odd">
+<td><code>col_integer()</code></td>
+<td>inteiro</td>
+<td><code>i</code></td>
+</tr>
+<tr class="even">
+<td><code>col_logical()</code></td>
+<td>lógico</td>
+<td><code>l</code></td>
+</tr>
+<tr class="odd">
+<td><code>col_factor()</code></td>
+<td>fator</td>
+<td><code>f</code></td>
+</tr>
+<tr class="even">
+<td><code>col_date(format = )</code></td>
+<td>data</td>
+<td><code>D</code></td>
+</tr>
+<tr class="odd">
+<td><code>col_skip()</code></td>
+<td>ignora a coluna</td>
+<td><code>_</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para tabelas pequenas, a forma abreviada é prática: <code>col_types = "ccfiddd"</code> diria o mesmo que o bloco acima, coluna por coluna.</p>
+</section></section><section id="o-csv-à-brasileira" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="o-csv-à-brasileira">
+<span class="header-section-number">5.3</span> O CSV “à brasileira”</h2>
+<p>Planilhas exportadas por computadores configurados em português costumam usar <strong>ponto e vírgula</strong> como separador (porque a vírgula já é o separador decimal) e, muitas vezes, a codificação <strong>latin1</strong> (ISO-8859-1) em vez de UTF-8. Vejamos o que acontece ao ler o ensaio de soja ingenuamente:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>soja_errado <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: One or more parsing issues, call `problems()` on your data frame for details,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; e.g.:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dat &lt;- vroom(...)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   problems(dat)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(soja_errado)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 120   1</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(soja_errado)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Local;Cultivar;Bloco;Produtividade (sc/ha);Peso 100 sementes (g);Dias at\xe9 matura\xe7\xe3o;Acamamento;Data de semeadura"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Uma tabela com <strong>uma única coluna</strong>, cujo nome é a linha de cabeçalho inteira. O <code>read_csv()</code> procurou vírgulas para separar as colunas, mas o arquivo usa <code>;</code>. Os acentos também aparecem como <code>\xe7</code>, sinal de codificação errada.</p>
+<section id="primeiro-passo-o-separador-e-o-decimal" class="level3" data-number="5.3.1"><h3 data-number="5.3.1" class="anchored" data-anchor-id="primeiro-passo-o-separador-e-o-decimal">
+<span class="header-section-number">5.3.1</span> Primeiro passo: o separador e o decimal</h3>
+<p><code>read_delim()</code> aceita qualquer separador, e o <code>locale()</code> informa a convenção numérica:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_col_types =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>soja <span class="sc">|&gt;</span> <span class="fu">select</span>(Bloco, <span class="st">`</span><span class="at">Produtividade (sc/ha)</span><span class="st">`</span>, <span class="st">`</span><span class="at">Peso 100 sementes (g)</span><span class="st">`</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">3</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Bloco `Produtividade (sc/ha)` `Peso 100 sementes (g)`</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;                   &lt;dbl&gt;                   &lt;dbl&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1                    56.1                    12.7</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2                    59.1                    15.8</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3                    55.5                    15.5</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(soja<span class="sc">$</span>Local)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Vi\xe7osa" "Rio Verde"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>As colunas estão separadas e os números decimais estão certos (<code>56.1</code>, não <code>561</code>), mas “Viçosa” ainda aparece como <code>"Vi\xe7osa"</code>. Usamos <code>show_col_types = FALSE</code> e mostramos só algumas colunas porque, com a codificação errada, o R nem consegue imprimir a tabela inteira: os nomes acentuados quebram a impressão com um erro de <code>invalid multibyte string</code>, mais um sintoma do mesmo problema.</p>
+</section><section id="segundo-passo-a-codificação" class="level3" data-number="5.3.2"><h3 data-number="5.3.2" class="anchored" data-anchor-id="segundo-passo-a-codificação">
+<span class="header-section-number">5.3.2</span> Segundo passo: a codificação</h3>
+<p>Codificação é a tabela que traduz bytes em letras. Em UTF-8, o “ç” ocupa dois bytes; em latin1, um só. Ler um arquivo latin1 como se fosse UTF-8 produz esses caracteres estranhos. Quando você não sabe a codificação, o <code>readr</code> pode estimar:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guess_encoding</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   encoding   confidence</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 ISO-8859-1        0.4</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Informamos a codificação no mesmo <code>locale()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>, <span class="at">encoding =</span> <span class="st">"latin1"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 120 Columns: 8</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: ";"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (4): Local, Cultivar, Acamamento, Data de semeadura</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (4): Bloco, Produtividade (sc/ha), Peso 100 sementes (g), Dias até matur...</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>soja</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 120 × 8</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Local  Cultivar  Bloco `Produtividade (sc/ha)` `Peso 100 sementes (g)`</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;                   &lt;dbl&gt;                   &lt;dbl&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 Viçosa "sj-01"       1                    56.1                    12.7</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 Viçosa "SJ-01"       2                    59.1                    15.8</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 Viçosa "SJ 01"       3                    55.5                    15.5</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 Viçosa "SJ-01"       4                    58.8                    16.2</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 Viçosa "SJ-02"       1                    65.5                    16.5</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 Viçosa " SJ-02 "     2                    51.7                    16.5</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 Viçosa "SJ-02"       3                    60.6                    16.9</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 Viçosa "SJ-02"       4                    61.8                    14.7</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 Viçosa "SJ-03"       1                    57.1                    14.1</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 Viçosa "SJ-03"       2                    56.7                    15.8</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 110 more rows</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 3 more variables: `Dias até maturação` &lt;dbl&gt;, Acamamento &lt;chr&gt;,</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `Data de semeadura` &lt;chr&gt;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(soja<span class="sc">$</span>Local)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Viçosa"    "Rio Verde"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Agora “Viçosa” está correta. Internamente, o <code>readr</code> converteu tudo para UTF-8, que é o padrão do R moderno.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Atalho: <code>read_csv2()</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>read_csv2()</code> já assume <code>;</code> como separador e vírgula decimal. Para este arquivo, <code>read_csv2(arquivo, locale = locale(encoding = "latin1"))</code> produziria o mesmo resultado. Preferimos <code>read_delim()</code> no texto porque ele deixa cada decisão explícita.</p>
+</div>
+</div>
+</section><section id="quando-a-leitura-falha-problems" class="level3" data-number="5.3.3"><h3 data-number="5.3.3" class="anchored" data-anchor-id="quando-a-leitura-falha-problems">
+<span class="header-section-number">5.3.3</span> Quando a leitura falha: <code>problems()</code>
+</h3>
+<p>A coluna <code>Data de semeadura</code> foi lida como texto. Vamos pedir que ela seja lida como data no formato brasileiro (<code>dia/mês/ano</code>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>soja_datas <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>, <span class="at">encoding =</span> <span class="st">"latin1"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="st">`</span><span class="at">Data de semeadura</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">col_date</span>(<span class="at">format =</span> <span class="st">"%d/%m/%Y"</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: One or more parsing issues, call `problems()` on your data frame for details,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; e.g.:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dat &lt;- vroom(...)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   problems(dat)</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O aviso diz que houve problemas. Em vez de ignorá-lo, investigue:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">problems</span>(soja_datas) <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>file)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 23 × 4</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      row   col expected           actual    </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;chr&gt;              &lt;chr&gt;     </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1     2     8 date like %d/%m/%Y 2024-10-16</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2     8     8 date like %d/%m/%Y 2024-10-15</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3    10     8 date like %d/%m/%Y 2024-10-17</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4    12     8 date like %d/%m/%Y 2024-10-15</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5    30     8 date like %d/%m/%Y 2024-10-16</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6    32     8 date like %d/%m/%Y 2024-10-15</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7    34     8 date like %d/%m/%Y 2024-10-16</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8    43     8 date like %d/%m/%Y 2024-10-15</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9    44     8 date like %d/%m/%Y 2024-10-16</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10    46     8 date like %d/%m/%Y 2024-10-15</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 13 more rows</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Algumas datas foram digitadas no formato internacional (<code>2024-10-16</code>) e não se encaixam em <code>%d/%m/%Y</code>. O <code>readr</code> as transformou em <code>NA</code>. Se você não tivesse olhado <code>problems()</code>, teria perdido essas datas sem perceber. Na aula 8 veremos como ler datas com formatos misturados usando o <code>lubridate</code>; por enquanto, a lição é: <strong>todo aviso de leitura merece uma olhada em <code>problems()</code></strong>.</p>
+</section><section id="valores-faltantes-codificados" class="level3" data-number="5.3.4"><h3 data-number="5.3.4" class="anchored" data-anchor-id="valores-faltantes-codificados">
+<span class="header-section-number">5.3.4</span> Valores faltantes codificados</h3>
+<p>Por padrão, o <code>readr</code> considera faltantes as células vazias e o texto <code>"NA"</code>. Se a planilha usa outros códigos, informe-os no argumento <code>na</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(arquivo, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"-"</span>, <span class="st">"s/d"</span>, <span class="st">"perdida"</span>))</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section></section><section id="readxl-planilhas-excel" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="readxl-planilhas-excel">
+<span class="header-section-number">5.4</span> <code>readxl</code>: planilhas Excel</h2>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Intenção do pacote: <code>readxl</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problema que resolve.</strong> Boa parte dos dados de campo chega em <code>.xlsx</code>, muitas vezes com várias abas, cabeçalhos decorativos e células mescladas. Converter cada aba para CSV à mão é lento e não deixa registro.</p>
+<p><strong>Filosofia.</strong> O <code>readxl</code> lê <code>.xls</code> e <code>.xlsx</code> <strong>sem depender do Excel nem do Java</strong>, com a mesma lógica do <code>readr</code>: adivinha os tipos, aceita <code>na</code> e <code>col_types</code> e devolve um <code>tibble</code>. Ele só lê, nunca escreve, e faz isso bem.</p>
+<p><strong>Por que ele e não as alternativas.</strong> <code>openxlsx</code> e <code>writexl</code> também leem ou escrevem Excel; o <code>openxlsx</code> é ótimo quando você precisa <strong>criar</strong> planilhas formatadas, e o usamos para gerar os dados deste curso. Para <strong>ler</strong>, o <code>readxl</code> é o mais simples e robusto, e faz parte da instalação do tidyverse. Pacotes antigos baseados em Java (<code>xlsx</code>, <code>XLConnect</code>) dão problemas de instalação e devem ser evitados.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>arquivo_milho <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"milho_met_2024.xlsx"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">excel_sheets</span>(arquivo_milho)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Londrina"    "Rio Verde"   "Sete Lagoas" "Viçosa"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O arquivo tem uma aba por local. Leiamos a primeira sem nenhuma opção:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo_milho, <span class="at">sheet =</span> <span class="st">"Viçosa"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; New names:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...2`</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...3`</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...4`</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...5`</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...6`</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...7`</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 63 × 7</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Ensaio de híbridos de milho - safra 202…¹ ...2  ...3  ...4  ...5  ...6  ...7 </span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;                                     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 Responsável: equipe de campo QGSL         &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 &lt;NA&gt;                                      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; </span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 Híbrido                                   Bloco Prod… Altu… Flor… Data… Obs  </span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 HB01                                      1     9404  236   63    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 HB01                                      2     9617  225   64    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 HB01                                      3     8858  216   61    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 HB02                                      1     8104  239   61    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 HB02                                      2     8112  219   63    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 HB02                                      3     7608  217   60    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 HB03                                      1     8622  222   61    13/1… &lt;NA&gt; </span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 53 more rows</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ abbreviated name: ¹​`Ensaio de híbridos de milho - safra 2023/24 - Viçosa`</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A primeira linha da planilha virou o nome da primeira coluna e as demais ganharam nomes <code>...2</code>, <code>...3</code>. Abrindo o arquivo no Excel, vemos duas linhas de anotação e uma linha em branco antes do cabeçalho. O argumento <code>skip</code> pula essas linhas:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>milho_vicosa <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(arquivo_milho, <span class="at">sheet =</span> <span class="st">"Viçosa"</span>, <span class="at">skip =</span> <span class="dv">3</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>milho_vicosa</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 60 × 7</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Híbrido Bloco `Prod (kg/ha)` `Altura (cm)` `Florescimento (dias)`</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;                  &lt;dbl&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 HB01        1           9404           236                     63</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 HB01        2           9617           225                     64</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 HB01        3           8858           216                     61</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 HB02        1           8104           239                     61</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 HB02        2           8112           219                     63</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 HB02        3           7608           217                     60</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 HB03        1           8622           222                     61</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 HB03        2           9625           211                     60</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 HB03        3           9142           221                     59</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 HB04        1           9016           233                     62</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 50 more rows</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: `Data Plantio` &lt;chr&gt;, Obs &lt;chr&gt;</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Agora veja a aba de Londrina:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>milho_londrina <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(arquivo_milho, <span class="at">sheet =</span> <span class="st">"Londrina"</span>, <span class="at">skip =</span> <span class="dv">3</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>milho_londrina</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 60 × 7</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Híbrido Bloco `Prod (kg/ha)` `Altura (cm)` `Florescimento (dias)`</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt;                  &lt;dbl&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 HB01        1 9779                     247                     64</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 HB01        2 9706                     210                     65</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 HB01        3 9039                     215                     66</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 HB02        1 8403                     211                     67</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 HB02        2 9430                     221                     68</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 HB02        3 8495                     228                     64</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 HB03        1 10545                    199                     67</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 HB03        2 9140                     206                     67</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 HB03        3 -                        201                     66</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 HB04        1 7848                     226                     70</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 50 more rows</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: `Data Plantio` &lt;chr&gt;, Obs &lt;chr&gt;</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p><code>Prod (kg/ha)</code> foi lida como <strong>texto</strong> (<code>&lt;chr&gt;</code>) em Londrina, mas como número em Viçosa. Por quê? Vamos procurar os valores que não parecem números:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>milho_londrina <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(<span class="fu">as.numeric</span>(<span class="st">`</span><span class="at">Prod (kg/ha)</span><span class="st">`</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Híbrido, Bloco, <span class="st">`</span><span class="at">Prod (kg/ha)</span><span class="st">`</span>, Obs)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: There was 1 warning in `filter()`.</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ In argument: `is.na(as.numeric(`Prod (kg/ha)`))`.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Caused by warning:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! NAs introduced by coercion</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 4</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Híbrido Bloco `Prod (kg/ha)` Obs            </span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;          </span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 HB03        3 -              parcela perdida</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 HB06        3 perdida        parcela perdida</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 HB14        3 perdida        parcela perdida</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 HB17        2 -              parcela perdida</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 HB20        1 perdida        parcela perdida</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O digitador marcou parcelas perdidas com <code>"-"</code> e <code>"perdida"</code> na própria coluna de produtividade. Um único texto basta para a coluna inteira virar texto. A solução é declarar esses códigos como faltantes:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>milho_londrina <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  arquivo_milho,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sheet =</span> <span class="st">"Londrina"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip =</span> <span class="dv">3</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"-"</span>, <span class="st">"perdida"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>milho_londrina</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 60 × 7</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Híbrido Bloco `Prod (kg/ha)` `Altura (cm)` `Florescimento (dias)`</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;                  &lt;dbl&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 HB01        1           9779           247                     64</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 HB01        2           9706           210                     65</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 HB01        3           9039           215                     66</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 HB02        1           8403           211                     67</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 HB02        2           9430           221                     68</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 HB02        3           8495           228                     64</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 HB03        1          10545           199                     67</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 HB03        2           9140           206                     67</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 HB03        3             NA           201                     66</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 HB04        1           7848           226                     70</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 50 more rows</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: `Data Plantio` &lt;chr&gt;, Obs &lt;chr&gt;</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<section id="outras-opções-úteis" class="level3" data-number="5.4.1"><h3 data-number="5.4.1" class="anchored" data-anchor-id="outras-opções-úteis">
+<span class="header-section-number">5.4.1</span> Outras opções úteis</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo, <span class="at">sheet =</span> <span class="dv">2</span>)                  <span class="co"># aba pela posição</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo, <span class="at">range =</span> <span class="st">"B4:F64"</span>)           <span class="co"># apenas um retângulo de células</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo, <span class="at">range =</span> <span class="fu">cell_cols</span>(<span class="st">"A:D"</span>))   <span class="co"># apenas algumas colunas</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo, <span class="at">col_types =</span> <span class="fu">c</span>(<span class="st">"text"</span>, <span class="st">"numeric"</span>, <span class="st">"numeric"</span>, <span class="st">"skip"</span>))</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="lendo-todas-as-abas-de-uma-vez" class="level3" data-number="5.4.2"><h3 data-number="5.4.2" class="anchored" data-anchor-id="lendo-todas-as-abas-de-uma-vez">
+<span class="header-section-number">5.4.2</span> Lendo todas as abas de uma vez</h3>
+<p>Com quatro abas, poderíamos copiar a leitura quatro vezes. Mas repetir código é exatamente o que o Módulo 2 vai nos ensinar a evitar. Como prévia, veja como o <code>purrr</code> lê todas as abas e as empilha em uma tabela, acrescentando uma coluna com o nome da aba:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>milho_2024 <span class="ot">&lt;-</span> <span class="fu">excel_sheets</span>(arquivo_milho) <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(aba) <span class="fu">read_excel</span>(arquivo_milho, <span class="at">sheet =</span> aba, <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"-"</span>, <span class="st">"perdida"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>(<span class="at">names_to =</span> <span class="st">"local"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>milho_2024</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 240 × 8</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    local    Híbrido Bloco `Prod (kg/ha)` `Altura (cm)` `Florescimento (dias)`</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;                  &lt;dbl&gt;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 Londrina HB01        1           9779           247                     64</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 Londrina HB01        2           9706           210                     65</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 Londrina HB01        3           9039           215                     66</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 Londrina HB02        1           8403           211                     67</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 Londrina HB02        2           9430           221                     68</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 Londrina HB02        3           8495           228                     64</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 Londrina HB03        1          10545           199                     67</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 Londrina HB03        2           9140           206                     67</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 Londrina HB03        3             NA           201                     66</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 Londrina HB04        1           7848           226                     70</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 230 more rows</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: `Data Plantio` &lt;chr&gt;, Obs &lt;chr&gt;</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(milho_2024, local)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   local           n</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;int&gt;</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Londrina       60</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Rio Verde      60</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Sete Lagoas    60</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Viçosa         60</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Não se preocupe com os detalhes de <code>map()</code> e <code>list_rbind()</code> agora: eles serão o tema das aulas 14 e 15.</p>
+</section></section><section id="janitor-nomes-de-colunas-limpos" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="janitor-nomes-de-colunas-limpos">
+<span class="header-section-number">5.5</span> <code>janitor</code>: nomes de colunas limpos</h2>
+<p>Nomes como <code>`Prod (kg/ha)`</code> e <code>`Data Plantio`</code> exigem crases no código, são fáceis de digitar errado e quebram o estilo do laboratório.</p>
+<div class="intencao callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Intenção do pacote: <code>janitor</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Problema que resolve.</strong> Dados vindos de planilhas têm nomes de colunas com espaços, acentos, parênteses, maiúsculas e duplicatas, além de linhas e colunas vazias e totais misturados aos dados.</p>
+<p><strong>Filosofia.</strong> O <code>janitor</code> reúne pequenas funções de “faxina” que fazem uma coisa cada e se encaixam no pipe. A mais usada, <code>clean_names()</code>, converte todos os nomes para <code>snake_case</code>, remove acentos e símbolos e resolve nomes repetidos.</p>
+<p><strong>Por que ele e não as alternativas.</strong> Renomear coluna por coluna com <code>dplyr::rename()</code> funciona, mas é trabalhoso e precisa ser refeito quando a planilha muda. <code>clean_names()</code> aplica uma regra consistente a qualquer planilha, em uma linha. O <code>janitor</code> traz ainda <code>remove_empty()</code>, <code>get_dupes()</code> e <code>tabyl()</code>, que usaremos ao longo do curso.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: 'janitor'</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     chisq.test, fisher.test</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>milho_2024 <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(milho_2024)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(milho_2024)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "local"              "hibrido"            "bloco"             </span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] "prod_kg_ha"         "altura_cm"          "florescimento_dias"</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] "data_plantio"       "obs"</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">clean_names</span>(soja)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(soja)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "local"               "cultivar"            "bloco"              </span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] "produtividade_sc_ha" "peso_100_sementes_g" "dias_ate_maturacao" </span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] "acamamento"          "data_de_semeadura"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p><code>Híbrido</code> virou <code>hibrido</code>, <code>Prod (kg/ha)</code> virou <code>prod_kg_ha</code> e <code>Dias até maturação</code> virou <code>dias_ate_maturacao</code>. Todas as aulas seguintes usarão nomes nesse formato.</p>
+<p>Duas outras funções de faxina, para conhecer:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linhas duplicadas pela combinação de colunas que deveria ser única</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_dupes</span>(milho_2024, local, hibrido, bloco)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; No duplicate combinations found of: local, hibrido, bloco</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 0 × 9</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 9 variables: local &lt;chr&gt;, hibrido &lt;chr&gt;, bloco &lt;dbl&gt;, dupe_count &lt;int&gt;,</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   prod_kg_ha &lt;dbl&gt;, altura_cm &lt;dbl&gt;, florescimento_dias &lt;dbl&gt;,</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   data_plantio &lt;chr&gt;, obs &lt;chr&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove linhas e colunas inteiramente vazias</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="fu">remove_empty</span>(milho_2024, <span class="at">which =</span> <span class="fu">c</span>(<span class="st">"rows"</span>, <span class="st">"cols"</span>)) <span class="sc">|&gt;</span> <span class="fu">dim</span>()</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 240   8</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Nenhuma duplicata: cada combinação de local, híbrido e bloco aparece uma vez, como esperado em um delineamento em blocos.</p>
+</section><section id="outros-formatos" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="outros-formatos">
+<span class="header-section-number">5.6</span> Outros formatos</h2>
+<section id="spss-stata-e-sas-haven" class="level3" data-number="5.6.1"><h3 data-number="5.6.1" class="anchored" data-anchor-id="spss-stata-e-sas-haven">
+<span class="header-section-number">5.6.1</span> SPSS, Stata e SAS: <code>haven</code>
+</h3>
+<p>Dados de colaboradores de outras áreas às vezes chegam em formatos de programas estatísticos comerciais. O pacote <code>haven</code> lê e escreve esses arquivos e preserva os <strong>rótulos de valores</strong>, comuns nesses programas:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Criamos um arquivo .sav de exemplo em uma pasta temporária</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>arquivo_sav <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".sav"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cultivar =</span> <span class="fu">c</span>(<span class="st">"SJ-01"</span>, <span class="st">"SJ-02"</span>, <span class="st">"SJ-03"</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reacao =</span> <span class="fu">labelled</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="at">resistente =</span> <span class="dv">1</span>, <span class="at">moderada =</span> <span class="dv">2</span>, <span class="at">suscetivel =</span> <span class="dv">3</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_sav</span>(arquivo_sav)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>dados_spss <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(arquivo_sav)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>dados_spss</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   cultivar reacao        </span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;dbl+lbl&gt;     </span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 SJ-01    1 [resistente]</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 SJ-02    3 [suscetivel]</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 SJ-03    2 [moderada]</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">as_factor</span>(dados_spss)   <span class="co"># converte os rótulos em um fator comum do R</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   cultivar reacao    </span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;fct&gt;     </span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 SJ-01    resistente</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 SJ-02    suscetivel</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 SJ-03    moderada</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Programa</th>
+<th>Ler</th>
+<th>Escrever</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>SPSS</td>
+<td><code>read_sav()</code></td>
+<td><code>write_sav()</code></td>
+</tr>
+<tr class="even">
+<td>Stata</td>
+<td><code>read_dta()</code></td>
+<td><code>write_dta()</code></td>
+</tr>
+<tr class="odd">
+<td>SAS</td>
+<td><code>read_sas()</code></td>
+<td><code>write_xpt()</code></td>
+</tr>
+</tbody>
+</table></section></section><section id="salvando-resultados" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="salvando-resultados">
+<span class="header-section-number">5.7</span> Salvando resultados</h2>
+<p>Depois de ler e limpar, você vai querer gravar o resultado. O formato depende de quem vai usar o arquivo:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Formato</th>
+<th>Função</th>
+<th>Quando usar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>CSV</td>
+<td><code>write_csv()</code></td>
+<td>trocar dados com qualquer programa; vai bem no Git</td>
+</tr>
+<tr class="even">
+<td>CSV brasileiro</td>
+<td><code>write_csv2()</code></td>
+<td>enviar para alguém que vai abrir no Excel em português</td>
+</tr>
+<tr class="odd">
+<td>RDS</td>
+<td><code>write_rds()</code></td>
+<td>guardar um objeto R <strong>exatamente</strong> como está (tipos, fatores, listas)</td>
+</tr>
+<tr class="even">
+<td>Excel</td>
+<td><code>writexl::write_xlsx()</code></td>
+<td>entregar planilhas a colaboradores</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pasta_tmp <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(milho_2024, <span class="fu">file.path</span>(pasta_tmp, <span class="st">"milho_2024.csv"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(milho_2024, <span class="fu">file.path</span>(pasta_tmp, <span class="st">"milho_2024.rds"</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>writexl<span class="sc">::</span><span class="fu">write_xlsx</span>(milho_2024, <span class="fu">file.path</span>(pasta_tmp, <span class="st">"milho_2024.xlsx"</span>))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># O RDS preserva o tibble e os tipos; o CSV precisa ser lido e interpretado de novo</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="fu">read_rds</span>(<span class="fu">file.path</span>(pasta_tmp, <span class="st">"milho_2024.rds"</span>)), milho_2024)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A regra do laboratório: arquivos <strong>intermediários</strong> entre scripts do mesmo projeto vão em RDS (rápido, preserva tipos); arquivos de <strong>saída</strong> que outras pessoas vão abrir vão em CSV ou Excel.</p>
+</section><section id="um-roteiro-de-conferência-após-cada-importação" class="level2" data-number="5.8"><h2 data-number="5.8" class="anchored" data-anchor-id="um-roteiro-de-conferência-após-cada-importação">
+<span class="header-section-number">5.8</span> Um roteiro de conferência após cada importação</h2>
+<p>Toda leitura de dados novos deve terminar com uma inspeção rápida. <code>glimpse()</code> mostra cada coluna na horizontal, com tipo e primeiros valores:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(milho_2024)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 240</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 8</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ local              &lt;chr&gt; "Londrina", "Londrina", "Londrina", "Londrina", "Lo…</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ hibrido            &lt;chr&gt; "HB01", "HB01", "HB01", "HB02", "HB02", "HB02", "HB…</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ bloco              &lt;dbl&gt; 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, …</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ prod_kg_ha         &lt;dbl&gt; 9779, 9706, 9039, 8403, 9430, 8495, 10545, 9140, NA…</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ altura_cm          &lt;dbl&gt; 247, 210, 215, 211, 221, 228, 199, 206, 201, 226, 2…</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ florescimento_dias &lt;dbl&gt; 64, 65, 66, 67, 68, 64, 67, 67, 66, 70, 61, 68, 70,…</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ data_plantio       &lt;chr&gt; "22/10/2023", "22/10/2023", "22/10/2023", "22/10/20…</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ obs                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "parcela perdida", …</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>Perguntas a responder antes de seguir:</p>
+<ol type="1">
+<li>O número de linhas e colunas é o esperado? (4 locais × 20 híbridos × 3 blocos = 240 linhas.)</li>
+<li>Cada coluna tem o tipo certo? (Produtividade numérica, datas como data ou texto a converter.)</li>
+<li>Quantos faltantes há em cada coluna, e eles fazem sentido?</li>
+<li>As categorias têm os valores esperados, sem variações de grafia?</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(milho_2024) <span class="sc">==</span> <span class="dv">4</span> <span class="sc">*</span> <span class="dv">20</span> <span class="sc">*</span> <span class="dv">3</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(milho_2024))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              local            hibrido              bloco         prod_kg_ha </span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0                  0                  0                  7 </span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          altura_cm florescimento_dias       data_plantio                obs </span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  0                  0                  0                222</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(soja, cultivar) <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">25</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 38 × 2</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    cultivar      n</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;     &lt;int&gt;</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 " SJ-01 "     1</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 " SJ-02 "     1</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 " SJ-06 "     1</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 " SJ-08 "     1</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 " SJ-14 "     1</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 " SJ-15 "     1</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 "SJ 01"       2</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 "SJ 04"       1</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 "SJ 10"       1</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 "SJ 11"       2</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 "SJ 12"       1</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 "SJ 14"       1</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 "SJ 15"       1</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 "SJ-01"       4</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 "SJ-02"       6</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16 "SJ-03"       8</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 17 "SJ-04"       4</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 18 "SJ-05"       8</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19 "SJ-06"       6</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20 "SJ-07"       6</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 21 "SJ-08"       6</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 22 "SJ-09"       7</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 23 "SJ-10"       6</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 24 "SJ-11"       6</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 25 "SJ-12"       7</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 13 more rows</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A última tabela revela um problema que resolveremos na aula 8: a mesma cultivar escrita de formas diferentes (<code>SJ-01</code>, <code>sj-01</code>, <code>SJ 01</code>).</p>
+</section><section id="por-baixo-do-capô" class="level2" data-number="5.9"><h2 data-number="5.9" class="anchored" data-anchor-id="por-baixo-do-capô">
+<span class="header-section-number">5.9</span> Por baixo do capô</h2>
+<section id="como-o-readr-adivinha-os-tipos" class="level3" data-number="5.9.1"><h3 data-number="5.9.1" class="anchored" data-anchor-id="como-o-readr-adivinha-os-tipos">
+<span class="header-section-number">5.9.1</span> Como o <code>readr</code> adivinha os tipos</h3>
+<p>O <code>readr</code> examina as primeiras 1000 linhas de cada coluna e escolhe o tipo mais restrito que acomoda todos os valores, na ordem lógico, inteiro, decimal, data, texto. Se o primeiro valor “estranho” estiver na linha 5000, a coluna será tipada errado. O argumento <code>guess_max</code> aumenta a amostra:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(arquivo, <span class="at">guess_max =</span> <span class="cn">Inf</span>)   <span class="co"># examina todas as linhas (mais lento)</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A especificação usada fica guardada no objeto e pode ser reaproveitada:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span>(locais)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; cols(</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   .default = col_double(),</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   local = col_character(),</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   municipio = col_character(),</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   uf = col_factor(levels = NULL, ordered = FALSE, include_na = FALSE),</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   latitude = col_double(),</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   longitude = col_double(),</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   altitude_m = col_integer()</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; )</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</section><section id="read.csv-faz-escolhas-diferentes" class="level3" data-number="5.9.2"><h3 data-number="5.9.2" class="anchored" data-anchor-id="read.csv-faz-escolhas-diferentes">
+<span class="header-section-number">5.9.2</span> <code>read.csv()</code> faz escolhas diferentes</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>locais_base <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"locais.csv"</span>))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(locais_base)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "data.frame"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">read.csv</span>(<span class="at">text =</span> <span class="st">"Prod (kg/ha),Data Plantio</span><span class="sc">\n</span><span class="st">9000,10/10/2023"</span>))</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Prod..kg.ha." "Data.Plantio"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O R base devolve um <code>data.frame</code> e altera nomes inválidos silenciosamente (<code>Prod..kg.ha.</code>), o que dificulta saber qual coluna veio de onde.</p>
+</section></section><section id="exercícios" class="level2" data-number="5.10"><h2 data-number="5.10" class="anchored" data-anchor-id="exercícios">
+<span class="header-section-number">5.10</span> Exercícios</h2>
+<ol type="1">
+<li>
+<strong>Locais.</strong> Leia <code>locais.csv</code> com <code>col_types</code> em forma abreviada, de modo que <code>uf</code> seja fator e <code>altitude_m</code> seja inteiro. Confira com <code>glimpse()</code>.</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"locais.csv"</span>), <span class="at">col_types =</span> <span class="st">"ccfddi"</span>) <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 4</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 6</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ local      &lt;chr&gt; "vicosa", "sete_lagoas", "rio_verde", "londrina"</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ municipio  &lt;chr&gt; "Viçosa", "Sete Lagoas", "Rio Verde", "Londrina"</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ uf         &lt;fct&gt; MG, MG, GO, PR</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ latitude   &lt;dbl&gt; -20.75, -19.47, -17.80, -23.31</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ longitude  &lt;dbl&gt; -42.88, -44.25, -50.93, -51.16</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ altitude_m &lt;int&gt; 650, 730, 750, 585</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>
+<strong>Soja completa.</strong> Leia <code>soja_ensaio_2025.csv</code> corretamente, já com nomes limpos, e responda: quantas parcelas há? Quantas têm produtividade faltante? Qual o tipo de <code>data_de_semeadura</code>?</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>soja <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"soja_ensaio_2025.csv"</span>),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delim =</span> <span class="st">";"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>, <span class="at">encoding =</span> <span class="st">"latin1"</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_col_types =</span> <span class="cn">FALSE</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(soja)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 120</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(soja<span class="sc">$</span>produtividade_sc_ha))</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(soja<span class="sc">$</span>data_de_semeadura)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "character"</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>A data continua como texto porque há dois formatos misturados. Ela será convertida na aula 8.</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>
+<strong>Uma aba com <code>range</code>.</strong> Leia da aba “Sete Lagoas” apenas as colunas de híbrido, bloco e produtividade, usando <code>range</code> e tratando os códigos de parcela perdida. Quantas parcelas perdidas há nesse local?</li>
+</ol>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sete_lagoas <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  arquivo_milho,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sheet =</span> <span class="st">"Sete Lagoas"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">range =</span> <span class="st">"A4:C64"</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">na =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"-"</span>, <span class="st">"perdida"</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>sete_lagoas</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 60 × 3</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Híbrido Bloco `Prod (kg/ha)`</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 HB01        1             NA</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 HB01        2           9976</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 HB01        3           9653</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 HB02        1          10384</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 HB02        2           9882</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 HB02        3           9839</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 HB03        1          10219</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 HB03        2           9448</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 HB03        3           9794</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 HB04        1          10598</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 50 more rows</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(sete_lagoas<span class="sc">$</span><span class="st">`</span><span class="at">Prod (kg/ha)</span><span class="st">`</span>))</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<p>O intervalo começa na linha 4 (o cabeçalho) e vai até a linha 64 (60 parcelas: 20 híbridos × 3 blocos).</p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>
+<strong>Diagnóstico.</strong> Por que a leitura abaixo produz uma coluna <code>Prod (kg/ha)</code> de texto, e por que isso é perigoso se você calcular a média logo em seguida com <code>as.numeric()</code>?</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(arquivo_milho, <span class="at">sheet =</span> <span class="st">"Londrina"</span>, <span class="at">skip =</span> <span class="dv">3</span>)</span></code></pre></div>
+<button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Solução
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Os códigos <code>"-"</code> e <code>"perdida"</code> fazem a coluna inteira ser lida como texto. Se você aplicar <code>as.numeric()</code> depois, eles viram <code>NA</code> com um aviso genérico, e a informação de <strong>por que</strong> o valor falta se perde. Pior: se houvesse um número digitado com vírgula (<code>"9.512,3"</code>), ele também viraria <code>NA</code> e passaria despercebido no meio dos códigos esperados. Declarar os códigos em <code>na = c("-", "perdida")</code> e manter a coluna <code>Obs</code> preserva a informação e faz qualquer <strong>outro</strong> texto inesperado continuar aparecendo como problema.</p>
+</div>
+</div>
+</div>
+</section><section id="resumo" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="resumo">Resumo</h2>
+<ul>
+<li>
+<code>read_csv()</code> para CSV padrão; <code>read_delim()</code> com <code>locale(decimal_mark = ",", encoding = "latin1")</code> para o padrão brasileiro.</li>
+<li>Declare os tipos com <code>col_types</code> em scripts de produção e inspecione <code>problems()</code> sempre que houver aviso.</li>
+<li>
+<code>read_excel()</code> com <code>sheet</code>, <code>skip</code>, <code>range</code> e <code>na</code> resolve a maioria das planilhas de campo; <code>excel_sheets()</code> lista as abas.</li>
+<li>
+<code>janitor::clean_names()</code> padroniza nomes para <code>snake_case</code>.</li>
+<li>Salve intermediários em RDS e saídas em CSV ou Excel. Termine toda importação conferindo dimensões, tipos, faltantes e categorias.</li>
+</ul></section><section id="para-saber-mais" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="para-saber-mais">Para saber mais</h2>
+<ul>
+<li>
+<em>R for Data Science</em>, capítulos “Data import” e “Spreadsheets” <span class="citation" data-cites="wickham2023r4ds">(<a href="../references.html#ref-wickham2023r4ds" role="doc-biblioref">Wickham et al. 2023</a>)</span>.</li>
+<li>
+<em>Ciência de Dados em R</em>, capítulo sobre importação de dados <span class="citation" data-cites="cursor_livro">(<a href="../references.html#ref-cursor_livro" role="doc-biblioref">Curso-R 2021</a>)</span>.</li>
+<li>
+<em>O Zen do R</em>, sobre organização de dados brutos e processados no projeto <span class="citation" data-cites="cursor_zen">(<a href="../references.html#ref-cursor_zen" role="doc-biblioref">Trecenti e Lente 2021</a>)</span>.</li>
+</ul>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-cursor_livro" class="csl-entry" role="listitem">
+Curso-R. 2021. <em>Ciência de Dados em R</em>. <a href="https://curso-r.github.io/livro-material/">https://curso-r.github.io/livro-material/</a>.
+</div>
+<div id="ref-cursor_zen" class="csl-entry" role="listitem">
+Trecenti, Julio, e Caio Lente. 2021. <em>O Zen do R</em>. Curso-R. <a href="https://curso-r.github.io/zen-do-r/">https://curso-r.github.io/zen-do-r/</a>.
+</div>
+<div id="ref-wickham2023r4ds" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, e Garrett Grolemund. 2023. <em>R for Data Science</em>. 2.ª ed. O’Reilly Media. <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../chapters/04-pacotes.html" class="pagination-link" aria-label="Pacotes e o ecossistema">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>  <span class="chapter-title">Pacotes e o ecossistema</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/06-dplyr.html" class="pagination-link" aria-label="Transformação com dplyr I">
+        <span class="nav-page-text"><span class="chapter-number">6</span>  <span class="chapter-title">Transformação com dplyr I</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body>
+</html>

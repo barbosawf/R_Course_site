@@ -1,0 +1,16 @@
+/* Estilos do livro do QGSL Lab */
+
+/* Botão de idioma (babelquarto) mais visível na barra lateral */
+.babelquarto-languages-button {
+  font-weight: 600;
+}
+
+/* Blocos de "Intenção do pacote" */
+.callout.intencao .callout-header {
+  font-weight: 700;
+}
+
+/* Saída do console um pouco mais discreta que o código */
+div.cell-output pre code {
+  opacity: 0.9;
+}
